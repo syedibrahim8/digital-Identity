@@ -10,9 +10,9 @@ const links = [
 ];
 
 const socials = [
-  { icon: <Github size={16} />, label: "GitHub", href: "https://github.com" },
-  { icon: <Linkedin size={16} />, label: "LinkedIn", href: "https://linkedin.com" },
-  { icon: <Mail size={16} />, label: "Email", href: "#contact" },
+  { icon: <Github size={16} />, label: "GitHub", href: "https://github.com/syedibrahim8" },
+  { icon: <Linkedin size={16} />, label: "LinkedIn", href: "https://www.linkedin.com/in/syed-ibrahim-ali-57975a388/" },
+  { icon: <Mail size={16} />, label: "Email", href: "mailto:syedibrahimofficial1@gmail.com" },
 ];
 
 export default function Footer() {
@@ -62,7 +62,7 @@ export default function Footer() {
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-fade">
-        <p>© {new Date().getFullYear()} Ibrahim. Built with Next.js & Tailwind v4.</p>
+        <p>© {new Date().getFullYear()} Syed Ibrahim Ali</p>
         <a
           href="#top"
           className="flex items-center gap-1 transition hover:text-white"

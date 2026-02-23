@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Star } from "lucide-react";
 import type { Project } from "@/lib/projects";
 
 const tagColors: Record<string, { bg: string; border: string; text: string }> = {
-  "Next.js": { bg: "rgba(255,255,255,0.08)", border: "rgba(255,255,255,0.15)", text: "#e2e8f0" },
+  "Next.js": { bg: "rgba(255,255,255,0.07)", border: "rgba(255,255,255,0.14)", text: "#e2e8f0" },
   "Node": { bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", text: "#6ee7b7" },
   "MongoDB": { bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", text: "#6ee7b7" },
   "Stripe": { bg: "rgba(99,102,241,0.14)", border: "rgba(99,102,241,0.35)", text: "#a5b4fc" },
@@ -16,14 +16,15 @@ const tagColors: Record<string, { bg: string; border: string; text: string }> = 
   "Cron": { bg: "rgba(251,146,60,0.12)", border: "rgba(251,146,60,0.3)", text: "#fdba74" },
   "API": { bg: "rgba(168,85,247,0.12)", border: "rgba(168,85,247,0.3)", text: "#d8b4fe" },
   "UX": { bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.3)", text: "#fda4af" },
+  "Animations": { bg: "rgba(251,113,133,0.12)", border: "rgba(251,113,133,0.3)", text: "#fda4af" },
+  "Responsive": { bg: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)", text: "#6ee7b7" },
 };
-
-const defaultTag = { bg: "rgba(255,255,255,0.06)", border: "rgba(255,255,255,0.12)", text: "#cbd5e1" };
+const defaultTag = { bg: "rgba(255,255,255,0.05)", border: "rgba(255,255,255,0.1)", text: "#94a3b8" };
 
 const gradients = [
-  "linear-gradient(135deg, rgba(168,85,247,1) 0%, rgba(129,140,248,1) 100%)",
-  "linear-gradient(135deg, rgba(56,189,248,1) 0%, rgba(99,102,241,1) 100%)",
-  "linear-gradient(135deg, rgba(251,113,133,1) 0%, rgba(168,85,247,1) 100%)",
+  "linear-gradient(135deg,#a855f7 0%,#818cf8 100%)",
+  "linear-gradient(135deg,#38bdf8 0%,#6366f1 100%)",
+  "linear-gradient(135deg,#f472b6 0%,#a855f7 100%)",
 ];
 
 export default function ProjectCard3D({
@@ -33,43 +34,75 @@ export default function ProjectCard3D({
   project: Project;
   index?: number;
 }) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rotateX = useSpring(my, { stiffness: 160, damping: 20 });
-  const rotateY = useSpring(mx, { stiffness: 160, damping: 20 });
+  const rotateX = useSpring(my, { stiffness: 150, damping: 22 });
+  const rotateY = useSpring(mx, { stiffness: 150, damping: 22 });
+
+  // Spotlight position
+  const [spot, setSpot] = useState({ x: 50, y: 50 });
+  const [hovering, setHovering] = useState(false);
 
   const onMove = (e: React.MouseEvent) => {
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    mx.set(((e.clientX - r.left) / r.width - 0.5) * 12);
-    my.set((0.5 - (e.clientY - r.top) / r.height) * 12);
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    mx.set((px - 0.5) * 14);
+    my.set((0.5 - py) * 14);
+    setSpot({ x: px * 100, y: py * 100 });
   };
-  const onLeave = () => { mx.set(0); my.set(0); };
+
+  const onLeave = () => {
+    mx.set(0); my.set(0);
+    setHovering(false);
+  };
+
+  const grad = gradients[index % gradients.length];
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
+      onMouseEnter={() => setHovering(true)}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className="glass rounded-3xl shadow-soft will-change-transform transition hover:glow-border h-full flex flex-col overflow-hidden"
+      className="relative glass rounded-3xl shadow-soft will-change-transform h-full flex flex-col overflow-hidden transition-all duration-300 group"
+      whileHover={{ scale: 1.015 }}
     >
-      {/* Top gradient bar */}
+      {/* Spotlight glare overlay */}
       <div
-        className="h-1 w-full flex-shrink-0"
-        style={{ background: gradients[index % gradients.length] }}
+        className="pointer-events-none absolute inset-0 z-20 rounded-3xl transition-opacity duration-300"
+        style={{
+          opacity: hovering ? 1 : 0,
+          background: `radial-gradient(280px circle at ${spot.x}% ${spot.y}%, rgba(255,255,255,0.055), transparent 60%)`,
+        }}
       />
 
-      <div className="flex flex-col flex-1 p-6" style={{ transform: "translateZ(16px)" }}>
-        {/* Label */}
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-purple-400">
-          Featured
-        </p>
+      {/* Top gradient bar */}
+      <div className="h-[3px] w-full flex-shrink-0" style={{ background: grad }} />
+
+      {/* Gradient number badge */}
+      <div
+        className="absolute right-4 top-6 flex h-8 w-8 items-center justify-center rounded-full text-xs font-black text-white"
+        style={{ background: grad, opacity: 0.9 }}
+      >
+        {String(project.id).padStart(2, "0")}
+      </div>
+
+      <div className="flex flex-col flex-1 p-6" style={{ transform: "translateZ(18px)" }}>
+        {/* Meta */}
+        <div className="flex items-center gap-2">
+          <Star size={10} style={{ color: grad.split(",")[1]?.split(" ")[1] ?? "#a855f7" }} />
+          <p className="text-[11px] font-bold uppercase tracking-widest text-purple-400">
+            Featured project
+          </p>
+        </div>
 
         {/* Title */}
-        <h3 className="mt-2 text-lg font-bold leading-snug">{project.title}</h3>
+        <h3 className="mt-2.5 pr-8 text-lg font-extrabold leading-snug">{project.title}</h3>
 
         {/* Punchline */}
         <p className="mt-2 text-sm leading-relaxed text-fade">{project.punchline}</p>
@@ -81,7 +114,7 @@ export default function ProjectCard3D({
             return (
               <span
                 key={t}
-                className="rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+                className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold"
                 style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.text }}
               >
                 {t}
@@ -90,11 +123,17 @@ export default function ProjectCard3D({
           })}
         </div>
 
+        {/* Divider */}
+        <div className="my-4 h-px bg-white/8" />
+
         {/* Highlights */}
-        <ul className="mt-4 flex-1 space-y-1.5">
+        <ul className="flex-1 space-y-2">
           {project.highlights.slice(0, 3).map((h) => (
             <li key={h} className="flex items-start gap-2 text-sm text-fade">
-              <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-400" />
+              <span
+                className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                style={{ background: grad }}
+              />
               {h}
             </li>
           ))}
@@ -104,17 +143,18 @@ export default function ProjectCard3D({
         <div className="mt-5 flex gap-2">
           <a
             href={project.links.demo ?? "#"}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-            style={{ background: gradients[index % gradients.length] }}
+            className="group/btn relative flex flex-1 items-center justify-center gap-1.5 overflow-hidden rounded-xl py-2.5 text-sm font-bold text-white transition hover:scale-[1.02]"
+            style={{ background: grad }}
           >
-            <ExternalLink size={13} />
+            <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover/btn:translate-x-full" />
+            <ExternalLink size={12} />
             Live Demo
           </a>
           <a
             href={project.links.github ?? "#"}
-            className="glass flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold text-fade transition hover:glow-border hover:text-white"
+            className="glass flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
           >
-            <Github size={13} />
+            <Github size={12} />
             Code
           </a>
         </div>

@@ -12,7 +12,7 @@ const items = [
   },
   {
     k: "Stack",
-    v: "Next.js · Node · Mongo · TS",
+    v: "Next.js · Node · Express · Mongo · TS",
     color: "#38bdf8",
     bg: "rgba(56,189,248,0.12)",
     border: "rgba(56,189,248,0.25)",

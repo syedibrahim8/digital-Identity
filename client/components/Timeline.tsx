@@ -5,27 +5,35 @@ import { motion } from "framer-motion";
 const steps = [
   {
     phase: "01",
-    t: "Started building",
-    d: "Learned fundamentals, shipped small apps fast. Fell in love with making things feel alive.",
+    year: "H1 - 2025",
+    t: "Learning the fundamentals",
+    d: "Started with fundamentals, fell in love with making things feel alive. Shipped small projects obsessively.",
     color: "#a855f7",
+    icon: "🌱",
   },
   {
     phase: "02",
-    t: "Fullstack systems",
-    d: "Moved into APIs, database modelling, auth flows, JWT sessions — real backend engineering.",
+    year: "H2 - 2025",
+    t: "Going fullstack",
+    d: "Moved deep into Node.js, MongoDB, Express, auth flows, JWT sessions — building real backend foundations.",
     color: "#38bdf8",
+    icon: "⚙️",
   },
   {
     phase: "03",
+    year: "2026",
     t: "Marketplace architecture",
-    d: "Designed selection flows, escrow logic, proof-submission windows, Stripe integration.",
+    d: "Designed selection flows, escrow payment logic, proof-submission time windows, Stripe — systems thinking at scale.",
     color: "#34d399",
+    icon: "🏗️",
   },
   {
     phase: "04",
-    t: "Now",
-    d: "Shipping premium UIs with clean backend foundations. Building for founders and scale.",
+    year: "Now",
+    t: "Shipping premium products",
+    d: "Fullstack TypeScript, premium UX, founder-grade workflows. Built for teams that want engineering depth.",
     color: "#f59e0b",
+    icon: "🚀",
   },
 ];
 
@@ -33,59 +41,83 @@ export default function Timeline() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <motion.div
+        className="mb-14"
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest text-purple-400">
-          Background
-        </p>
-        <h2 className="mt-3 text-4xl font-extrabold tracking-tight md:text-5xl">
-          My{" "}
-          <span className="grad-rose">journey</span>.
+        <p className="text-xs font-bold uppercase tracking-widest text-purple-400">Background</p>
+        <h2 className="mt-3 text-4xl font-black tracking-tighter md:text-5xl">
+          My <span className="grad-rose">journey</span>.
         </h2>
       </motion.div>
 
-      <div className="mt-12 relative">
-        {/* Vertical line */}
+      <div className="relative">
+        {/* Vertical gradient line */}
         <div
-          className="absolute left-[18px] top-0 bottom-0 w-px md:left-1/2 md:-translate-x-px"
-          style={{ background: "linear-gradient(to bottom, rgba(168,85,247,0.6), rgba(56,189,248,0.2), transparent)" }}
+          className="absolute left-[35px] top-0 bottom-0 w-px md:left-1/2 md:-translate-x-px"
+          style={{
+            background: "linear-gradient(to bottom, rgba(168,85,247,0.8) 0%, rgba(56,189,248,0.5) 50%, rgba(245,158,11,0.3) 85%, transparent 100%)",
+          }}
         />
 
-        <div className="space-y-10">
+        <div className="space-y-8">
           {steps.map((s, i) => (
             <motion.div
               key={s.phase}
-              className={`relative flex gap-6 md:gap-0 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
-              initial={{ opacity: 0, y: 12 }}
+              className={`relative flex ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, delay: i * 0.08 }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Dot */}
-              <div
-                className="absolute left-0 z-10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 border-white/20 text-xs font-bold md:left-1/2 md:-translate-x-1/2"
-                style={{ background: s.color + "30", color: s.color, borderColor: s.color + "60" }}
-              >
-                {s.phase}
+              {/* Phase dot */}
+              <div className="absolute left-0 z-10 md:left-1/2 md:-translate-x-1/2">
+                <motion.div
+                  className="flex h-[70px] w-[70px] flex-col items-center justify-center rounded-2xl text-center"
+                  style={{
+                    background: s.color + "18",
+                    border: `1.5px solid ${s.color}55`,
+                    boxShadow: `0 0 30px ${s.color}25`,
+                  }}
+                  whileInView={{ boxShadow: `0 0 50px ${s.color}40` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.1 + 0.3 }}
+                >
+                  <span className="text-xl">{s.icon}</span>
+                  <span className="mt-0.5 text-[9px] font-bold" style={{ color: s.color }}>{s.year}</span>
+                </motion.div>
               </div>
 
+              {/* Spacer for center alignment */}
+              <div className="hidden w-[50%] md:block" />
+
               {/* Card */}
-              <div
-                className={`ml-14 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"}`}
-              >
-                <div
-                  className="glass rounded-2xl p-5 transition hover:glow-border"
-                  style={{ borderColor: s.color + "30" }}
+              <div className={`ml-20 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:pl-12" : "md:pr-12"}`}>
+                <motion.div
+                  className="glass rounded-3xl p-6 transition-all hover:glow-border relative overflow-hidden"
+                  whileHover={{ y: -4, scale: 1.01 }}
                 >
-                  <p className="text-xs font-semibold" style={{ color: s.color }}>
-                    Phase {s.phase}
-                  </p>
-                  <p className="mt-1 text-lg font-bold">{s.t}</p>
+                  {/* Card accent bar */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-[2px]"
+                    style={{ background: `linear-gradient(90deg, ${s.color}, transparent)` }}
+                  />
+
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="rounded-lg px-2.5 py-1 text-[10px] font-black uppercase tracking-widest"
+                      style={{ background: s.color + "20", color: s.color, border: `1px solid ${s.color}40` }}
+                    >
+                      Phase {s.phase}
+                    </span>
+                    <span className="text-[10px] font-medium text-fade">{s.year}</span>
+                  </div>
+
+                  <p className="mt-3 text-lg font-extrabold">{s.t}</p>
                   <p className="mt-2 text-sm leading-relaxed text-fade">{s.d}</p>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           ))}

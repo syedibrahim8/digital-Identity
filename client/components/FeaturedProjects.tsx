@@ -23,7 +23,7 @@ export default function FeaturedProjects() {
           <span className="grad-purple">projects</span>.
         </h2>
         <p className="mt-4 max-w-2xl text-base text-fade">
-          Real systems: workflows, payments, background jobs, edge cases, and
+          Real systems: role-based workflows, payments, authentications, background jobs, edge cases, and
           clean UX that proves engineering depth.
         </p>
       </motion.div>

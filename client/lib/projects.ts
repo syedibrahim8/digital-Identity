@@ -1,4 +1,5 @@
 export type Project = {
+  id: string,
   slug: string;
   title: string;
   punchline: string;
@@ -9,6 +10,7 @@ export type Project = {
 
 export const FEATURED_PROJECTS: Project[] = [
   {
+    id:"1",
     slug: "influencer-marketplace",
     title: "Influencer Marketplace (Escrow-style)",
     punchline: "Workflow-driven campaigns with proof submission + review windows + release logic.",
@@ -18,9 +20,10 @@ export const FEATURED_PROJECTS: Project[] = [
       "Proof submission & review windows (time-bound)",
       "Escrow-style payment release after milestones",
     ],
-    links: { github: "#", demo: "#" },
+    links: { github: "https://github.com/syedibrahim8/RentMyHeader", demo: "#" },
   },
   {
+    id:"2",
     slug: "youtube-fetcher",
     title: "YouTube Video Fetcher",
     punchline: "Background fetching + search/sort + paginated API + dashboard UI.",
@@ -33,6 +36,7 @@ export const FEATURED_PROJECTS: Project[] = [
     links: { github: "#", demo: "#" },
   },
   {
+    id:"3",
     slug: "smartphone-learning",
     title: "Smartphone Learning Platform",
     punchline: "Step-based learning experience that teaches real actions with clarity.",
@@ -42,6 +46,6 @@ export const FEATURED_PROJECTS: Project[] = [
       "Mobile-first UI, clean interaction",
       "Designed for real-world usability",
     ],
-    links: { github: "#", demo: "#" },
+    links: { github: "https://github.com/syedibrahim8/smartPhone-Fundamentals", demo: "#" },
   },
 ]
