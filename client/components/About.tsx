@@ -1,59 +1,108 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Zap, Layers, Code2, Lightbulb } from "lucide-react";
 
 const principles = [
-  { title: "Performance-first", desc: "Fast UI, clean APIs, no jank. Motion stays smooth." },
-  { title: "Workflow thinking", desc: "I design flows with edge cases, guards, and clear states." },
-  { title: "Clean architecture", desc: "Readable modules, validation, and maintainable structure." },
-  { title: "Product mindset", desc: "I build what users actually understand and enjoy." },
+  {
+    icon: <Zap size={16} />,
+    title: "Performance-first",
+    desc: "Fast UI, clean APIs, no jank. Motion stays smooth and purposeful.",
+    color: "#f59e0b",
+  },
+  {
+    icon: <Layers size={16} />,
+    title: "Workflow thinking",
+    desc: "I design flows with edge cases, guards, time windows, and clear states.",
+    color: "#a855f7",
+  },
+  {
+    icon: <Code2 size={16} />,
+    title: "Clean architecture",
+    desc: "Readable modules, validation layers, maintainable and scalable structure.",
+    color: "#38bdf8",
+  },
+  {
+    icon: <Lightbulb size={16} />,
+    title: "Product mindset",
+    desc: "I build what users actually understand, enjoy, and come back to.",
+    color: "#34d399",
+  },
+];
+
+const stats = [
+  { a: "10+", b: "Projects" },
+  { a: "Real-world", b: "Workflows" },
+  { a: "Fullstack TS", b: "Stack" },
+  { a: "Unfair", b: "Energy" },
 ];
 
 export default function About() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14">
-      <div className="grid gap-8 md:grid-cols-2">
+    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        {/* LEFT */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.65 }}
         >
-          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-            Engineering with <span style={{ color: "rgba(168,85,247,0.95)" }}>intent</span>.
+          <p className="text-xs font-semibold uppercase tracking-widest text-purple-400">
+            About me
+          </p>
+          <h2 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
+            Engineering with{" "}
+            <span className="grad-purple">intent</span>.
           </h2>
-          <p className="mt-4 text-muted">
-            I don’t just ship screens. I build systems: data models, workflows, timing windows,
-            integrations, and reliability — wrapped in UI that feels premium.
+          <p className="mt-5 text-base leading-relaxed text-fade">
+            I don't just ship screens. I build systems: data models, workflows,
+            timing windows, integrations, and reliability — wrapped in UI that
+            feels premium. Every decision is deliberate.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-fade">
+            From escrow-style payment releases to background job orchestration,
+            I work at the intersection of clean code and real product value.
           </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            {[
-              { a: "Projects", b: "10+" },
-              { a: "Workflows", b: "Real-world" },
-              { a: "Stack", b: "Fullstack TS" },
-              { a: "Energy", b: "Unfair" },
-            ].map((x) => (
-              <div key={x.a} className="glass rounded-3xl p-4">
-                <p className="text-xs text-muted">{x.a}</p>
-                <p className="mt-1 text-xl font-semibold">{x.b}</p>
+          {/* Stats */}
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            {stats.map((x) => (
+              <div key={x.a} className="glass rounded-2xl p-4">
+                <p className="text-xl font-extrabold grad-purple">{x.a}</p>
+                <p className="mt-0.5 text-xs text-fade">{x.b}</p>
               </div>
             ))}
           </div>
         </motion.div>
 
+        {/* RIGHT */}
         <motion.div
-          className="grid gap-3"
-          initial={{ opacity: 0, y: 12 }}
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.05 }}
+          transition={{ duration: 0.65, delay: 0.08 }}
         >
-          {principles.map((p) => (
-            <div key={p.title} className="glass rounded-3xl p-5 hover:glow-border transition">
-              <p className="font-semibold">{p.title}</p>
-              <p className="mt-2 text-sm text-muted">{p.desc}</p>
-            </div>
+          {principles.map((p, i) => (
+            <motion.div
+              key={p.title}
+              className="glass rounded-2xl p-5 transition hover:glow-border"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              whileHover={{ y: -4 }}
+            >
+              <div
+                className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-xl"
+                style={{ background: p.color + "25", color: p.color }}
+              >
+                {p.icon}
+              </div>
+              <p className="font-bold">{p.title}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-fade">{p.desc}</p>
+            </motion.div>
           ))}
         </motion.div>
       </div>
