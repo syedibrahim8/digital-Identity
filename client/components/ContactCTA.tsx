@@ -112,7 +112,7 @@ export default function ContactCTA() {
             </div>
 
             {/* Email display */}
-            <div className="mt-8 flex flex-wrap items-center gap-2 sm:gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
+            <div className="mt-8 flex w-fit flex-wrap items-center gap-2 sm:gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="pulse-dot" style={{ background: "#a855f7", boxShadow: "0 0 0 0 rgba(168,85,247,0.5)" }} />
                 <span className="text-xs sm:text-sm text-fade whitespace-nowrap">Direct email:</span>
