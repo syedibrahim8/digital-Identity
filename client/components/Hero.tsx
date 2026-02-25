@@ -41,7 +41,11 @@ export default function Hero() {
             className="mt-6 text-5xl font-black leading-[1.03] tracking-tighter md:text-6xl xl:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.65,
+              delay: 0.04,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <span className="text-shimmer block">I build</span>
             <span className="grad-purple block">systems</span>
@@ -61,7 +65,8 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             Product-minded fullstack engineer — MERN · TypeScript · Stripe ·
-            Architecture. I ship experiences with serious engineering underneath.
+            Architecture. I ship experiences with serious engineering
+            underneath.
           </motion.p>
 
           {/* Skill badges */}
@@ -105,34 +110,51 @@ export default function Hero() {
               whileTap={{ scale: 0.97 }}
             >
               {/* Shimmer sweep on hover */}
-              <span
-                className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-all duration-500 group-hover:translate-x-full group-hover:opacity-100"
-              />
+              <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-500 group-hover:translate-x-full group-hover:opacity-100" />
               <span className="relative flex items-center gap-2">
                 View Projects
-                <ArrowRight size={14} className="transition group-hover:translate-x-0.5" />
+                <ArrowRight
+                  size={14}
+                  className="transition group-hover:translate-x-0.5"
+                />
               </span>
             </motion.a>
 
             <motion.a
               href="#terminal"
-              className="glass flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
+              className="group relative overflow-hidden glass flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >
+              {/* shimmer sweep */}
+              <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Terminal size={13} />
               Terminal
             </motion.a>
 
             <motion.a
-              href="#"
-              className="glass flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
+              href="/Ibrahim_resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden glass flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              aria-label="Download Resume"
+              aria-label="Open Resume"
             >
+              {/* shimmer sweep */}
+              <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Download size={13} />
               Resume
+              <span
+                className="ml-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-wide"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  color: "rgba(226,232,240,0.85)",
+                }}
+              >
+                PDF
+              </span>
             </motion.a>
           </motion.div>
 
@@ -146,7 +168,11 @@ export default function Hero() {
             {stats.map((s) => (
               <div key={s.label}>
                 <p className="text-2xl font-black grad-purple">
-                  <CountUp to={s.n} prefix={s.prefix ?? ""} suffix={s.suffix ?? ""} />
+                  <CountUp
+                    to={s.n}
+                    prefix={s.prefix ?? ""}
+                    suffix={s.suffix ?? ""}
+                  />
                 </p>
                 <p className="mt-0.5 text-[11px] text-fade">{s.label}</p>
               </div>
@@ -170,24 +196,41 @@ export default function Hero() {
           {/* Glow blob */}
           <div
             className="pointer-events-none absolute -inset-12 rounded-full opacity-25 blur-3xl animate-float"
-            style={{ background: "radial-gradient(circle,rgba(168,85,247,0.6),transparent 70%)" }}
+            style={{
+              background:
+                "radial-gradient(circle,rgba(168,85,247,0.6),transparent 70%)",
+            }}
           />
 
           {/* Card */}
           <div className="glass-strong glow-border shadow-soft rounded-3xl overflow-hidden relative">
             {/* Gradient top bar */}
-            <div className="h-[3px]" style={{ background: "linear-gradient(90deg,#a855f7,#818cf8,#38bdf8,#f472b6)" }} />
+            <div
+              className="h-[3px]"
+              style={{
+                background:
+                  "linear-gradient(90deg,#a855f7,#818cf8,#38bdf8,#f472b6)",
+              }}
+            />
 
             {/* Card content */}
             <div className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-purple-400">Now building</p>
-                  <h3 className="mt-1.5 text-xl font-extrabold">Founder-grade workflows</h3>
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-purple-400">
+                    Now building
+                  </p>
+                  <h3 className="mt-1.5 text-xl font-extrabold">
+                    Founder-grade workflows
+                  </h3>
                 </div>
                 <span
                   className="flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-bold"
-                  style={{ background: "rgba(168,85,247,0.2)", border: "1px solid rgba(168,85,247,0.4)", color: "#d8b4fe" }}
+                  style={{
+                    background: "rgba(168,85,247,0.2)",
+                    border: "1px solid rgba(168,85,247,0.4)",
+                    color: "#d8b4fe",
+                  }}
                 >
                   <Sparkles size={10} />
                   Live
@@ -197,14 +240,29 @@ export default function Hero() {
               {/* Feature rows */}
               <div className="mt-5 space-y-2.5">
                 {[
-                  { t: "Escrow-style payments & releases", c: "#a855f7", icon: "💸" },
-                  { t: "Proof submission & review windows", c: "#38bdf8", icon: "📋" },
-                  { t: "Clean APIs, validation, edge cases", c: "#34d399", icon: "⚙️" },
+                  {
+                    t: "Escrow-style payments & releases",
+                    c: "#a855f7",
+                    icon: "💸",
+                  },
+                  {
+                    t: "Proof submission & review windows",
+                    c: "#38bdf8",
+                    icon: "📋",
+                  },
+                  {
+                    t: "Clean APIs, validation, edge cases",
+                    c: "#34d399",
+                    icon: "⚙️",
+                  },
                 ].map((x) => (
                   <div
                     key={x.t}
                     className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition hover:scale-[1.01]"
-                    style={{ background: x.c + "14", border: `1px solid ${x.c}35` }}
+                    style={{
+                      background: x.c + "14",
+                      border: `1px solid ${x.c}35`,
+                    }}
                   >
                     <span className="text-base">{x.icon}</span>
                     {x.t}
@@ -218,17 +276,20 @@ export default function Hero() {
                 <span style={{ color: "#38bdf8" }}>ibrahim</span>{" "}
                 <span style={{ color: "#f8f8fc" }}>= {"{"}</span>
                 <br />
-                {"  "}<span style={{ color: "#34d399" }}>role</span>
+                {"  "}
+                <span style={{ color: "#34d399" }}>role</span>
                 <span style={{ color: "#f8f8fc" }}>: </span>
                 <span style={{ color: "#fbbf24" }}>"fullstack engineer"</span>
                 <span style={{ color: "#f8f8fc" }}>,</span>
                 <br />
-                {"  "}<span style={{ color: "#34d399" }}>stack</span>
+                {"  "}
+                <span style={{ color: "#34d399" }}>stack</span>
                 <span style={{ color: "#f8f8fc" }}>: </span>
                 <span style={{ color: "#fbbf24" }}>"MERN + TS"</span>
                 <span style={{ color: "#f8f8fc" }}>,</span>
                 <br />
-                {"  "}<span style={{ color: "#34d399" }}>ships</span>
+                {"  "}
+                <span style={{ color: "#34d399" }}>ships</span>
                 <span style={{ color: "#f8f8fc" }}>: </span>
                 <span style={{ color: "#f472b6" }}>true</span>
                 <br />

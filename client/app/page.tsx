@@ -51,21 +51,21 @@ export default function HomePage() {
 
       {/* Hero purple blob */}
       <div
-        className="pointer-events-none fixed -top-60 left-1/2 h-[800px] w-[800px] -translate-x-1/2 rounded-full blur-[130px]"
+        className="pointer-events-none fixed -top-60 left-1/2 h-200 w-200 -translate-x-1/2 rounded-full blur-[130px]"
         style={{ background: "radial-gradient(circle,rgba(168,85,247,0.12),transparent 70%)" }}
         aria-hidden
       />
 
       {/* Right sky blob */}
       <div
-        className="pointer-events-none fixed top-[45vh] right-[-200px] h-[600px] w-[600px] rounded-full blur-[110px]"
+        className="pointer-events-none fixed top-[45vh] -right-50 h-150 w-150 rounded-full blur-[110px]"
         style={{ background: "radial-gradient(circle,rgba(56,189,248,0.08),transparent 70%)" }}
         aria-hidden
       />
 
       {/* Bottom rose blob */}
       <div
-        className="pointer-events-none fixed bottom-0 left-0 h-[500px] w-[500px] rounded-full blur-[110px]"
+        className="pointer-events-none fixed bottom-0 left-0 h-125 w-125 rounded-full blur-[110px]"
         style={{ background: "radial-gradient(circle,rgba(251,113,133,0.07),transparent 70%)" }}
         aria-hidden
       />

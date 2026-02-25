@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ibrahim — Fullstack Engineer & Systems Builder",
+  title: "Ibrahim — Fullstack Developer",
   description:
     "Portfolio of Ibrahim — product-minded fullstack engineer specialising in MERN, TypeScript, real-world workflows, payment systems, and premium UX.",
   openGraph: {
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-[var(--font-inter)]">{children}</body>
+      <body className="font-(--font-inter)">{children}</body>
     </html>
   );
 }

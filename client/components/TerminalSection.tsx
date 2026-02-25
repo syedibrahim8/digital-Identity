@@ -6,7 +6,10 @@ import { motion } from "framer-motion";
 
 type Line = { type: "sys" | "out" | "err" | "cmd"; text: string };
 
-const COMMANDS: Record<string, (projects: typeof FEATURED_PROJECTS) => string[]> = {
+const COMMANDS: Record<
+  string,
+  (projects: typeof FEATURED_PROJECTS) => string[]
+> = {
   help: () => [
     "╔═══════════════════════════════════════════╗",
     "║       IbrahimOS — Available Commands      ║",
@@ -62,7 +65,10 @@ const COMMANDS: Record<string, (projects: typeof FEATURED_PROJECTS) => string[]>
 
 const INIT: Line[] = [
   { type: "sys", text: "IbrahimOS v2.0 ─ Fullstack Edition" },
-  { type: "sys", text: `Last login: ${new Date().toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric" })}.` },
+  {
+    type: "sys",
+    text: `Last login: ${new Date().toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric" })}.`,
+  },
   { type: "sys", text: "" },
   { type: "out", text: '  Type "help" to see available commands.' },
   { type: "sys", text: "" },
@@ -75,8 +81,110 @@ export default function TerminalSection() {
   const [hIdx, setHIdx] = useState(-1);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
+  const termRef = useRef<HTMLDivElement>(null);
+  const wheelTargetRef = useRef(0);
+  const wheelRafRef = useRef<number | null>(null);
+const stickRef = useRef(true);
 
-  const scrollBottom = () => setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 30);
+  useEffect(() => {
+  const el = outputRef.current;
+  if (!el) return;
+
+  const onScroll = () => {
+    const nearBottom =
+    el.scrollHeight - el.scrollTop - el.clientHeight < 40; // threshold
+    stickRef.current = nearBottom;
+  };
+
+  el.addEventListener("scroll", onScroll, { passive: true });
+  onScroll(); // init
+
+  return () => el.removeEventListener("scroll", onScroll);
+}, []);
+
+useEffect(() => {
+  const el = outputRef.current;
+  if (!el) return;
+
+  if (stickRef.current) {
+    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }
+}, [lines])
+
+ useEffect(() => {
+  const term = termRef.current;
+  const out = outputRef.current;
+  if (!term || !out) return;
+
+  // initialize target to current
+  wheelTargetRef.current = out.scrollTop;
+
+  const step = () => {
+    const el = outputRef.current;
+    if (!el) return;
+
+    const current = el.scrollTop;
+    const target = wheelTargetRef.current;
+
+    // easing (0.18–0.28 feels great)
+    const next = current + (target - current) * 0.21;
+
+    el.scrollTop = next;
+
+    if (Math.abs(target - next) > 0.5) {
+      wheelRafRef.current = requestAnimationFrame(step);
+    } else {
+      el.scrollTop = target;
+      wheelRafRef.current = null;
+    }
+  };
+
+  const onWheel = (e: WheelEvent) => {
+    const targetNode = e.target as Node | null;
+    if (!targetNode || !term.contains(targetNode)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // update the target scroll position
+    const max = out.scrollHeight - out.clientHeight;
+    const speed = 1.2; // increase to 1.2 if you want it faster
+    wheelTargetRef.current = Math.max(
+      0,
+      Math.min(max, wheelTargetRef.current + e.deltaY * speed)
+    );
+
+    // start animation loop if not running
+    if (wheelRafRef.current == null) {
+      wheelRafRef.current = requestAnimationFrame(step);
+    }
+  };
+
+  document.addEventListener("wheel", onWheel, { passive: false, capture: true });
+
+  return () => {
+    document.removeEventListener("wheel", onWheel, true);
+    if (wheelRafRef.current != null) cancelAnimationFrame(wheelRafRef.current);
+  };
+}, []);
+
+useEffect(() => {
+  const term = termRef.current;
+  if (!term) return;
+
+  const onTouchMove = (e: TouchEvent) => {
+    const target = e.target as Node | null;
+    if (!target || !term.contains(target)) return;
+    e.preventDefault();
+  };
+
+  document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+
+  return () => {
+    document.removeEventListener("touchmove", onTouchMove, true);
+  };
+}, []);
 
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
@@ -94,7 +202,10 @@ export default function TerminalSection() {
     if (handler) {
       setLines((p) => [
         ...p,
-        ...handler(FEATURED_PROJECTS).map((t) => ({ type: "out" as const, text: t })),
+        ...handler(FEATURED_PROJECTS).map((t) => ({
+          type: "out" as const,
+          text: t,
+        })),
         { type: "sys", text: "" },
       ]);
     } else {
@@ -104,7 +215,7 @@ export default function TerminalSection() {
         { type: "sys", text: "" },
       ]);
     }
-    scrollBottom();
+    // scrollBottom();
   };
 
   const lineColor = (type: Line["type"]) => {
@@ -124,21 +235,33 @@ export default function TerminalSection() {
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.6 }}
       >
-        <p className="text-xs font-bold uppercase tracking-widest text-purple-400">Interactive</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-purple-400">
+          Interactive
+        </p>
         <h2 className="mt-3 text-4xl font-black tracking-tighter md:text-5xl">
           Terminal <span className="grad-sky">mode</span>.
         </h2>
         <p className="mt-3 max-w-2xl text-base text-fade">
           Try{" "}
-          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">help</code>,{" "}
-          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">whoami</code>,{" "}
-          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">projects</code>.
+          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">
+            help
+          </code>
+          ,{" "}
+          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">
+            whoami
+          </code>
+          ,{" "}
+          <code className="rounded-md bg-white/10 px-1.5 py-0.5 text-xs text-purple-300 font-mono">
+            projects
+          </code>
+          .
         </p>
       </motion.div>
 
       {/* Terminal */}
       <motion.div
-        className="glass-strong rounded-3xl shadow-soft overflow-hidden border border-white/10"
+        ref={termRef}
+        className="glass-strong rounded-3xl shadow-soft overflow-hidden border border-white/10 overscroll-contain"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -150,11 +273,22 @@ export default function TerminalSection() {
           style={{ background: "rgba(0,0,0,0.3)" }}
         >
           <div className="flex gap-1.5">
-            <span className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition" style={{ background: "#ff5f57" }} />
-            <span className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition" style={{ background: "#febc2e" }} />
-            <span className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition" style={{ background: "#28c840" }} />
+            <span
+              className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition"
+              style={{ background: "#ff5f57" }}
+            />
+            <span
+              className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition"
+              style={{ background: "#febc2e" }}
+            />
+            <span
+              className="h-3 w-3 rounded-full cursor-pointer hover:opacity-80 transition"
+              style={{ background: "#28c840" }}
+            />
           </div>
-          <p className="font-mono text-[11px] text-white/35">ibrahim@portfolio ─ zsh</p>
+          <p className="font-mono text-[11px] text-white/35">
+            ibrahim@portfolio ─ zsh
+          </p>
           <div className="w-16 text-right">
             <span className="text-[10px] text-white/20 font-mono">⌘K</span>
           </div>
@@ -162,12 +296,16 @@ export default function TerminalSection() {
 
         {/* Output area */}
         <div
-          className="h-[360px] cursor-text overflow-auto p-5 font-mono text-sm"
+          ref={outputRef}
+          className="h-[420px] cursor-text overflow-y-auto overscroll-contain p-5 font-mono text-sm"
           onClick={() => inputRef.current?.focus()}
           style={{ background: "rgba(0,0,0,0.2)" }}
         >
           {lines.map((l, i) => (
-            <div key={i} className={`whitespace-pre-wrap leading-[1.7] ${lineColor(l.type)}`}>
+            <div
+              key={i}
+              className={`whitespace-pre-wrap leading-[1.7] ${lineColor(l.type)}`}
+            >
               {l.text}
             </div>
           ))}
@@ -175,7 +313,10 @@ export default function TerminalSection() {
         </div>
 
         {/* Input row */}
-        <div className="border-t border-white/10" style={{ background: "rgba(0,0,0,0.3)" }}>
+        <div
+          className="border-t border-white/10"
+          style={{ background: "rgba(0,0,0,0.3)" }}
+        >
           <form
             className="flex items-center gap-2 px-5 py-3"
             onSubmit={(e) => {
@@ -204,7 +345,7 @@ export default function TerminalSection() {
                   e.preventDefault();
                   const next = Math.max(hIdx - 1, -1);
                   setHIdx(next);
-                  setInput(next === -1 ? "" : history[next] ?? "");
+                  setInput(next === -1 ? "" : (history[next] ?? ""));
                 }
               }}
               className="flex-1 bg-transparent font-mono text-sm text-white/90 caret-purple-400 outline-none placeholder:text-white/20"
