@@ -6,68 +6,68 @@ import { ExternalLink, Github, Star } from "lucide-react";
 import type { Project } from "@/lib/projects";
 
 const tagColors: Record<string, { bg: string; border: string; text: string }> =
-  {
-    "Next.js": {
-      bg: "rgba(255,255,255,0.07)",
-      border: "rgba(255,255,255,0.14)",
-      text: "#e2e8f0",
-    },
-    Node: {
-      bg: "rgba(52,211,153,0.12)",
-      border: "rgba(52,211,153,0.3)",
-      text: "#6ee7b7",
-    },
-    MongoDB: {
-      bg: "rgba(52,211,153,0.12)",
-      border: "rgba(52,211,153,0.3)",
-      text: "#6ee7b7",
-    },
-    Stripe: {
-      bg: "rgba(99,102,241,0.14)",
-      border: "rgba(99,102,241,0.35)",
-      text: "#a5b4fc",
-    },
-    TypeScript: {
-      bg: "rgba(56,189,248,0.12)",
-      border: "rgba(56,189,248,0.35)",
-      text: "#7dd3fc",
-    },
-    React: {
-      bg: "rgba(56,189,248,0.12)",
-      border: "rgba(56,189,248,0.3)",
-      text: "#7dd3fc",
-    },
-    Express: {
-      bg: "rgba(255,255,255,0.07)",
-      border: "rgba(255,255,255,0.14)",
-      text: "#cbd5e1",
-    },
-    Cron: {
-      bg: "rgba(251,146,60,0.12)",
-      border: "rgba(251,146,60,0.3)",
-      text: "#fdba74",
-    },
-    API: {
-      bg: "rgba(168,85,247,0.12)",
-      border: "rgba(168,85,247,0.3)",
-      text: "#d8b4fe",
-    },
-    UX: {
-      bg: "rgba(251,113,133,0.12)",
-      border: "rgba(251,113,133,0.3)",
-      text: "#fda4af",
-    },
-    Animations: {
-      bg: "rgba(251,113,133,0.12)",
-      border: "rgba(251,113,133,0.3)",
-      text: "#fda4af",
-    },
-    Responsive: {
-      bg: "rgba(52,211,153,0.12)",
-      border: "rgba(52,211,153,0.3)",
-      text: "#6ee7b7",
-    },
-  };
+{
+  "Next.js": {
+    bg: "rgba(255,255,255,0.07)",
+    border: "rgba(255,255,255,0.14)",
+    text: "#e2e8f0",
+  },
+  Node: {
+    bg: "rgba(52,211,153,0.12)",
+    border: "rgba(52,211,153,0.3)",
+    text: "#6ee7b7",
+  },
+  MongoDB: {
+    bg: "rgba(52,211,153,0.12)",
+    border: "rgba(52,211,153,0.3)",
+    text: "#6ee7b7",
+  },
+  Stripe: {
+    bg: "rgba(99,102,241,0.14)",
+    border: "rgba(99,102,241,0.35)",
+    text: "#a5b4fc",
+  },
+  TypeScript: {
+    bg: "rgba(56,189,248,0.12)",
+    border: "rgba(56,189,248,0.35)",
+    text: "#7dd3fc",
+  },
+  React: {
+    bg: "rgba(56,189,248,0.12)",
+    border: "rgba(56,189,248,0.3)",
+    text: "#7dd3fc",
+  },
+  Express: {
+    bg: "rgba(255,255,255,0.07)",
+    border: "rgba(255,255,255,0.14)",
+    text: "#cbd5e1",
+  },
+  Cron: {
+    bg: "rgba(251,146,60,0.12)",
+    border: "rgba(251,146,60,0.3)",
+    text: "#fdba74",
+  },
+  API: {
+    bg: "rgba(168,85,247,0.12)",
+    border: "rgba(168,85,247,0.3)",
+    text: "#d8b4fe",
+  },
+  UX: {
+    bg: "rgba(251,113,133,0.12)",
+    border: "rgba(251,113,133,0.3)",
+    text: "#fda4af",
+  },
+  Animations: {
+    bg: "rgba(251,113,133,0.12)",
+    border: "rgba(251,113,133,0.3)",
+    text: "#fda4af",
+  },
+  Responsive: {
+    bg: "rgba(52,211,153,0.12)",
+    border: "rgba(52,211,153,0.3)",
+    text: "#6ee7b7",
+  },
+};
 const defaultTag = {
   bg: "rgba(255,255,255,0.05)",
   border: "rgba(255,255,255,0.1)",
@@ -103,8 +103,15 @@ export default function ProjectCard3D({
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width;
     const py = (e.clientY - r.top) / r.height;
-    mx.set((px - 0.5) * 14);
-    my.set((0.5 - py) * 14);
+
+    // Safety check for mobile: if user is not using a mouse, don't perform heavy tilt
+    if (window.matchMedia("(hover: none)").matches) {
+      mx.set(0);
+      my.set(0);
+    } else {
+      mx.set((px - 0.5) * 14);
+      my.set((0.5 - py) * 14);
+    }
     setSpot({ x: px * 100, y: py * 100 });
   };
 
@@ -150,7 +157,7 @@ export default function ProjectCard3D({
       </div>
 
       <div
-        className="flex flex-col flex-1 p-6"
+        className="flex flex-col flex-1 p-5 sm:p-6"
         style={{ transform: "translateZ(18px)" }}
       >
         {/* Meta */}

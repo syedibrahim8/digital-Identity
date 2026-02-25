@@ -38,7 +38,7 @@ export default function Hero() {
 
           {/* Headline */}
           <motion.h1
-            className="mt-6 text-5xl font-black leading-[1.03] tracking-tighter md:text-6xl xl:text-7xl"
+            className="mt-6 text-[2.75rem] font-black leading-[1.03] tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -160,21 +160,21 @@ export default function Hero() {
 
           {/* Stats */}
           <motion.div
-            className="mt-10 flex gap-8 border-t border-white/10 pt-8"
+            className="mt-10 flex gap-4 sm:gap-8 border-t border-white/10 pt-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             {stats.map((s) => (
               <div key={s.label}>
-                <p className="text-2xl font-black grad-purple">
+                <p className="text-xl sm:text-2xl font-black grad-purple">
                   <CountUp
                     to={s.n}
                     prefix={s.prefix ?? ""}
                     suffix={s.suffix ?? ""}
                   />
                 </p>
-                <p className="mt-0.5 text-[11px] text-fade">{s.label}</p>
+                <p className="mt-0.5 text-[10px] sm:text-[11px] text-fade">{s.label}</p>
               </div>
             ))}
           </motion.div>

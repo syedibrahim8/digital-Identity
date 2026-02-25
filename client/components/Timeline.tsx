@@ -94,9 +94,9 @@ export default function Timeline() {
               <div className="hidden w-[50%] md:block" />
 
               {/* Card */}
-              <div className={`ml-20 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:pl-12" : "md:pr-12"}`}>
+              <div className={`ml-16 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:pl-12" : "md:pr-12"}`}>
                 <motion.div
-                  className="glass rounded-3xl p-6 transition-all hover:glow-border relative overflow-hidden"
+                  className="glass rounded-3xl p-5 sm:p-6 transition-all hover:glow-border relative overflow-hidden"
                   whileHover={{ y: -4, scale: 1.01 }}
                 >
                   {/* Card accent bar */}

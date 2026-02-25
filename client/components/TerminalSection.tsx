@@ -85,106 +85,106 @@ export default function TerminalSection() {
   const termRef = useRef<HTMLDivElement>(null);
   const wheelTargetRef = useRef(0);
   const wheelRafRef = useRef<number | null>(null);
-const stickRef = useRef(true);
+  const stickRef = useRef(true);
 
   useEffect(() => {
-  const el = outputRef.current;
-  if (!el) return;
-
-  const onScroll = () => {
-    const nearBottom =
-    el.scrollHeight - el.scrollTop - el.clientHeight < 40; // threshold
-    stickRef.current = nearBottom;
-  };
-
-  el.addEventListener("scroll", onScroll, { passive: true });
-  onScroll(); // init
-
-  return () => el.removeEventListener("scroll", onScroll);
-}, []);
-
-useEffect(() => {
-  const el = outputRef.current;
-  if (!el) return;
-
-  if (stickRef.current) {
-    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }
-}, [lines])
-
- useEffect(() => {
-  const term = termRef.current;
-  const out = outputRef.current;
-  if (!term || !out) return;
-
-  // initialize target to current
-  wheelTargetRef.current = out.scrollTop;
-
-  const step = () => {
     const el = outputRef.current;
     if (!el) return;
 
-    const current = el.scrollTop;
-    const target = wheelTargetRef.current;
+    const onScroll = () => {
+      const nearBottom =
+        el.scrollHeight - el.scrollTop - el.clientHeight < 40; // threshold
+      stickRef.current = nearBottom;
+    };
 
-    // easing (0.18–0.28 feels great)
-    const next = current + (target - current) * 0.21;
+    el.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // init
 
-    el.scrollTop = next;
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
 
-    if (Math.abs(target - next) > 0.5) {
-      wheelRafRef.current = requestAnimationFrame(step);
-    } else {
-      el.scrollTop = target;
-      wheelRafRef.current = null;
+  useEffect(() => {
+    const el = outputRef.current;
+    if (!el) return;
+
+    if (stickRef.current) {
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
     }
-  };
+  }, [lines])
 
-  const onWheel = (e: WheelEvent) => {
-    const targetNode = e.target as Node | null;
-    if (!targetNode || !term.contains(targetNode)) return;
+  useEffect(() => {
+    const term = termRef.current;
+    const out = outputRef.current;
+    if (!term || !out) return;
 
-    e.preventDefault();
-    e.stopPropagation();
+    // initialize target to current
+    wheelTargetRef.current = out.scrollTop;
 
-    // update the target scroll position
-    const max = out.scrollHeight - out.clientHeight;
-    const speed = 1.2; // increase to 1.2 if you want it faster
-    wheelTargetRef.current = Math.max(
-      0,
-      Math.min(max, wheelTargetRef.current + e.deltaY * speed)
-    );
+    const step = () => {
+      const el = outputRef.current;
+      if (!el) return;
 
-    // start animation loop if not running
-    if (wheelRafRef.current == null) {
-      wheelRafRef.current = requestAnimationFrame(step);
-    }
-  };
+      const current = el.scrollTop;
+      const target = wheelTargetRef.current;
 
-  document.addEventListener("wheel", onWheel, { passive: false, capture: true });
+      // easing (0.18–0.28 feels great)
+      const next = current + (target - current) * 0.21;
 
-  return () => {
-    document.removeEventListener("wheel", onWheel, true);
-    if (wheelRafRef.current != null) cancelAnimationFrame(wheelRafRef.current);
-  };
-}, []);
+      el.scrollTop = next;
 
-useEffect(() => {
-  const term = termRef.current;
-  if (!term) return;
+      if (Math.abs(target - next) > 0.5) {
+        wheelRafRef.current = requestAnimationFrame(step);
+      } else {
+        el.scrollTop = target;
+        wheelRafRef.current = null;
+      }
+    };
 
-  const onTouchMove = (e: TouchEvent) => {
-    const target = e.target as Node | null;
-    if (!target || !term.contains(target)) return;
-    e.preventDefault();
-  };
+    const onWheel = (e: WheelEvent) => {
+      const targetNode = e.target as Node | null;
+      if (!targetNode || !term.contains(targetNode)) return;
 
-  document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+      e.preventDefault();
+      e.stopPropagation();
 
-  return () => {
-    document.removeEventListener("touchmove", onTouchMove, true);
-  };
-}, []);
+      // update the target scroll position
+      const max = out.scrollHeight - out.clientHeight;
+      const speed = 1.2; // increase to 1.2 if you want it faster
+      wheelTargetRef.current = Math.max(
+        0,
+        Math.min(max, wheelTargetRef.current + e.deltaY * speed)
+      );
+
+      // start animation loop if not running
+      if (wheelRafRef.current == null) {
+        wheelRafRef.current = requestAnimationFrame(step);
+      }
+    };
+
+    document.addEventListener("wheel", onWheel, { passive: false, capture: true });
+
+    return () => {
+      document.removeEventListener("wheel", onWheel, true);
+      if (wheelRafRef.current != null) cancelAnimationFrame(wheelRafRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const term = termRef.current;
+    if (!term) return;
+
+    const onTouchMove = (e: TouchEvent) => {
+      const target = e.target as Node | null;
+      if (!target || !term.contains(target)) return;
+      e.preventDefault();
+    };
+
+    document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+
+    return () => {
+      document.removeEventListener("touchmove", onTouchMove, true);
+    };
+  }, []);
 
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
@@ -297,7 +297,7 @@ useEffect(() => {
         {/* Output area */}
         <div
           ref={outputRef}
-          className="h-[420px] cursor-text overflow-y-auto overscroll-contain p-5 font-mono text-sm"
+          className="h-[320px] sm:h-[420px] cursor-text overflow-y-auto overscroll-contain p-4 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm"
           onClick={() => inputRef.current?.focus()}
           style={{ background: "rgba(0,0,0,0.2)" }}
         >
@@ -348,7 +348,7 @@ useEffect(() => {
                   setInput(next === -1 ? "" : (history[next] ?? ""));
                 }
               }}
-              className="flex-1 bg-transparent font-mono text-sm text-white/90 caret-purple-400 outline-none placeholder:text-white/20"
+              className="flex-1 bg-transparent font-mono text-base sm:text-sm text-white/90 caret-purple-400 outline-none placeholder:text-white/20"
               placeholder="type a command…"
               autoComplete="off"
               spellCheck={false}

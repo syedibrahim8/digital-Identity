@@ -22,10 +22,22 @@ export default function HomePage() {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    // Prevent browser from trying to scroll to previous position on refresh
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+
     const lenis = new Lenis({ duration: 1.3, smoothWheel: true, syncTouch: true });
-    const raf = (t: number) => { lenis.raf(t); rafRef.current = requestAnimationFrame(raf); };
+    const raf = (t: number) => {
+      lenis.raf(t);
+      rafRef.current = requestAnimationFrame(raf);
+    };
     rafRef.current = requestAnimationFrame(raf);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); lenis.destroy(); };
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lenis.destroy();
+    };
   }, []);
 
   return (
