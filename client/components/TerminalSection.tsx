@@ -169,23 +169,6 @@ export default function TerminalSection() {
     };
   }, []);
 
-  useEffect(() => {
-    const term = termRef.current;
-    if (!term) return;
-
-    const onTouchMove = (e: TouchEvent) => {
-      const target = e.target as Node | null;
-      if (!target || !term.contains(target)) return;
-      e.preventDefault();
-    };
-
-    document.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
-
-    return () => {
-      document.removeEventListener("touchmove", onTouchMove, true);
-    };
-  }, []);
-
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;

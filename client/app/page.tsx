@@ -28,7 +28,7 @@ export default function HomePage() {
       window.scrollTo(0, 0);
     }
 
-    const lenis = new Lenis({ duration: 1.3, smoothWheel: true, syncTouch: true });
+    const lenis = new Lenis({ duration: 1.3, smoothWheel: true, syncTouch: false });
     const raf = (t: number) => {
       lenis.raf(t);
       rafRef.current = requestAnimationFrame(raf);
