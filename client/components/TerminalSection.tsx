@@ -252,7 +252,7 @@ export default function TerminalSection() {
       >
         {/* Title bar */}
         <div
-          className="flex items-center justify-between border-b border-white/10 px-5 py-3"
+          className="flex items-center justify-between gap-2 border-b border-white/10 px-3 py-3 sm:px-5"
           style={{ background: "rgba(0,0,0,0.3)" }}
         >
           <div className="flex gap-1.5">
@@ -269,10 +269,10 @@ export default function TerminalSection() {
               style={{ background: "#28c840" }}
             />
           </div>
-          <p className="font-mono text-[11px] text-white/35">
+          <p className="truncate font-mono text-[10px] text-white/35 sm:text-[11px]">
             ibrahim@portfolio ─ zsh
           </p>
-          <div className="w-16 text-right">
+          <div className="w-10 text-right sm:w-16">
             <span className="text-[10px] text-white/20 font-mono">⌘K</span>
           </div>
         </div>
@@ -280,7 +280,7 @@ export default function TerminalSection() {
         {/* Output area */}
         <div
           ref={outputRef}
-          className="h-[320px] sm:h-[420px] cursor-text overflow-y-auto overscroll-contain p-4 sm:p-5 font-mono text-[11px] sm:text-xs md:text-sm"
+           className="h-[300px] sm:h-[420px] cursor-text overflow-y-auto overscroll-contain p-3 sm:p-5 font-mono text-[10px] sm:text-xs md:text-sm"
           onClick={() => inputRef.current?.focus()}
           style={{ background: "rgba(0,0,0,0.2)" }}
         >
@@ -301,7 +301,7 @@ export default function TerminalSection() {
           style={{ background: "rgba(0,0,0,0.3)" }}
         >
           <form
-            className="flex items-center gap-2 px-5 py-3"
+            className="flex items-center gap-2 px-3 py-3 sm:px-5"
             onSubmit={(e) => {
               e.preventDefault();
               const cmd = input.trim();
@@ -331,7 +331,7 @@ export default function TerminalSection() {
                   setInput(next === -1 ? "" : (history[next] ?? ""));
                 }
               }}
-              className="flex-1 bg-transparent font-mono text-base sm:text-sm text-white/90 caret-purple-400 outline-none placeholder:text-white/20"
+              className="min-w-0 flex-1 bg-transparent font-mono text-sm sm:text-sm text-white/90 caret-purple-400 outline-none placeholder:text-white/20"
               placeholder="type a command…"
               autoComplete="off"
               spellCheck={false}

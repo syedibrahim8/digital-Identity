@@ -70,31 +70,31 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
               }}
             />
 
-            <div className="relative rounded-[22px] p-7 overflow-hidden" style={{ background: "rgb(8,8,12)" }}>
+            <div className="relative overflow-hidden rounded-[22px] p-5 sm:p-7" style={{ background: "rgb(8,8,12)" }}>
               {/* Top gradient line */}
               <div className="absolute top-0 left-0 right-0 h-[2px]"
                 style={{ background: "linear-gradient(90deg,#a855f7,#38bdf8,#f472b6)" }} />
 
               {/* Header */}
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <div className="pulse-dot" />
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-purple-400">
+                    <div className="pulse-dot shrink-0" />
+                    <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-purple-400 truncate">
                       {MESSAGES[msgIdx]}
                     </p>
                   </div>
-                  <h1 className="mt-2 text-2xl font-black tracking-tight">
+                  <h1 className="mt-2 text-xl font-black tracking-tight sm:text-2xl">
                     <span className="grad-purple">Ibrahim</span> / Portfolio
                   </h1>
                 </div>
                 <div
-                  className="rounded-2xl px-3.5 py-2 text-sm font-extrabold tabular-nums"
+                  className="rounded-2xl px-3 py-2 text-xs font-extrabold tabular-nums sm:px-3.5 sm:text-sm"
                   style={{
                     background: "rgba(168,85,247,0.15)",
                     border: "1px solid rgba(168,85,247,0.35)",
                     color: "#d8b4fe",
-                    minWidth: "64px",
+                    minWidth: "56px",
                     textAlign: "center",
                   }}
                 >
@@ -117,11 +117,11 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
               </div>
 
               {/* Modules */}
-              <div className="mt-6 grid grid-cols-3 gap-2">
+              <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-3">
                 {["Motion", "Components", "Data"].map((m, i) => (
                   <motion.div
                     key={m}
-                    className="rounded-xl px-3 py-2 text-center text-[11px] font-semibold"
+                    className="rounded-xl px-1.5 py-2 text-center text-[10px] sm:text-[11px] font-bold leading-tight flex items-center justify-center min-h-[36px]"
                     style={{
                       background: progress > (i + 1) * 30
                         ? "rgba(168,85,247,0.18)"
@@ -133,7 +133,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
                       opacity: progress > (i + 1) * 30 ? 1 : 0.4,
                     }}
                   >
-                    {progress > (i + 1) * 30 ? "✓ " : ""}{m}
+                    <span>{progress > (i + 1) * 30 ? "✓ " : ""}{m}</span>
                   </motion.div>
                 ))}
               </div>

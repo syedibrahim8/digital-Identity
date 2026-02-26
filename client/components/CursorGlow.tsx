@@ -13,6 +13,7 @@ export default function CursorGlow() {
   const ring = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
     let raf: number;
 
     const onMove = (e: MouseEvent) => {
@@ -55,7 +56,7 @@ export default function CursorGlow() {
       {/* Large ambient glow */}
       <div
         ref={glowRef}
-        className="pointer-events-none fixed left-0 top-0 z-[5] h-[400px] w-[400px] rounded-full"
+        className="pointer-events-none fixed left-0 top-0 z-[5] hidden h-[400px] w-[400px] rounded-full md:block"
         style={{
           background: "radial-gradient(circle, rgba(168,85,247,0.14) 3%, transparent 60%)",
           opacity: 0,
@@ -67,7 +68,7 @@ export default function CursorGlow() {
       {/* Lagging ring */}
       <div
         ref={ringRef}
-        className="pointer-events-none fixed left-0 top-0 z-999 h-10 w-10 rounded-full"
+        className="pointer-events-none fixed left-0 top-0 z-999 hidden h-10 w-10 rounded-full md:block"
         style={{
           border: "1.5px solid rgba(168,85,247,0.65)",
           opacity: 0,

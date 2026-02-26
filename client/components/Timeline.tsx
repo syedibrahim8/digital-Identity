@@ -56,7 +56,7 @@ export default function Timeline() {
       <div className="relative">
         {/* Vertical gradient line */}
         <div
-          className="absolute left-[35px] top-0 bottom-0 w-px md:left-1/2 md:-translate-x-px"
+          className="absolute bottom-0 left-[28px] top-0 w-px md:left-1/2 md:-translate-x-px"
           style={{
             background: "linear-gradient(to bottom, rgba(168,85,247,0.8) 0%, rgba(56,189,248,0.5) 50%, rgba(245,158,11,0.3) 85%, transparent 100%)",
           }}
@@ -75,7 +75,7 @@ export default function Timeline() {
               {/* Phase dot */}
               <div className="absolute left-0 z-10 md:left-1/2 md:-translate-x-1/2">
                 <motion.div
-                  className="flex h-[70px] w-[70px] flex-col items-center justify-center rounded-2xl text-center"
+                  className="flex h-14 w-14 flex-col items-center justify-center rounded-2xl text-center sm:h-[70px] sm:w-[70px]"
                   style={{
                     background: s.color + "18",
                     border: `1.5px solid ${s.color}55`,
@@ -94,7 +94,7 @@ export default function Timeline() {
               <div className="hidden w-[50%] md:block" />
 
               {/* Card */}
-              <div className={`ml-16 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:pl-12" : "md:pr-12"}`}>
+              <div className={`ml-12 md:ml-0 md:w-[46%] ${i % 2 === 0 ? "md:pl-12" : "md:pr-12"}`}>
                 <motion.div
                   className="glass rounded-3xl p-5 sm:p-6 transition-all hover:glow-border relative overflow-hidden"
                   whileHover={{ y: -4, scale: 1.01 }}

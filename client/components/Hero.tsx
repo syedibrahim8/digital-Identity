@@ -21,7 +21,7 @@ const stats = [
 
 export default function Hero() {
   return (
-    <div className="relative mx-auto max-w-7xl px-4 pt-14 pb-6 sm:px-6 md:pt-20">
+    <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-6 sm:px-6 md:pt-20">
       <div className="grid items-center gap-14 lg:grid-cols-2">
         {/* ── LEFT ─────────────────────────────── */}
         <div>
@@ -38,7 +38,7 @@ export default function Hero() {
 
           {/* Headline */}
           <motion.h1
-            className="mt-6 text-[2.75rem] font-black leading-[1.03] tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl"
+            className="mt-6 text-4xl font-black leading-[1.03] tracking-tighter sm:text-5xl md:text-6xl xl:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -160,7 +160,7 @@ export default function Hero() {
 
           {/* Stats */}
           <motion.div
-            className="mt-10 flex gap-4 sm:gap-8 border-t border-white/10 pt-8"
+            className="mt-10 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:flex sm:flex-wrap sm:gap-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -182,20 +182,20 @@ export default function Hero() {
 
         {/* ── RIGHT — feature card ─────────────── */}
         <motion.div
-          className="relative"
+          className="relative max-w-xl lg:max-w-none"
           initial={{ opacity: 0, x: 30, scale: 0.96 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.75, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Orbit ring */}
           <div
-            className="pointer-events-none absolute -inset-6 rounded-full border border-purple-500/15 animate-spin-slow"
+            className="pointer-events-none absolute -inset-2 rounded-full border border-purple-500/15 animate-spin-slow sm:-inset-6"
             style={{ borderStyle: "dashed" }}
           />
 
           {/* Glow blob */}
           <div
-            className="pointer-events-none absolute -inset-12 rounded-full opacity-25 blur-3xl animate-float"
+            className="pointer-events-none absolute -inset-6 rounded-full opacity-25 blur-3xl animate-float sm:-inset-12"
             style={{
               background:
                 "radial-gradient(circle,rgba(168,85,247,0.6),transparent 70%)",

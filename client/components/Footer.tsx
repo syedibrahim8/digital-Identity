@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="mx-auto max-w-7xl px-4 pb-12 sm:px-6">
       <div className="neon-line opacity-40" />
 
-      <div className="mt-8 grid gap-8 md:grid-cols-3">
+      <div className="mt-8 grid gap-8 text-center md:grid-cols-3 md:text-left">
         {/* Brand */}
         <div>
           <p className="text-lg font-extrabold tracking-tight">
@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
 
         {/* Nav links */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 md:justify-center">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-center">
           {links.map((l) => (
             <a
               key={l.href}
@@ -47,7 +47,7 @@ export default function Footer() {
         </div>
 
         {/* Social icons */}
-        <div className="flex items-start gap-2 md:justify-end">
+        <div className="flex items-start justify-center gap-2 md:justify-end">
           {socials.map((s) => (
             <a
               key={s.label}

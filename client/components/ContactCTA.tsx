@@ -56,14 +56,14 @@ export default function ContactCTA() {
             }}
           />
 
-          <div className="relative p-8 md:p-14">
+          <div className="relative p-5 sm:p-8 md:p-14">
             {/* Header */}
             <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-purple-400">
                   Let's build something serious
                 </p>
-                <h2 className="mt-3 text-4xl font-black tracking-tighter md:text-5xl lg:text-6xl">
+                <h2 className="mt-3 text-3xl font-black tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                   Want me on your team?
                 </h2>
                 <p className="mt-4 max-w-xl text-base leading-relaxed text-fade">
@@ -73,17 +73,17 @@ export default function ContactCTA() {
               </div>
 
               {/* Side decoration */}
-              <div className="flex flex-shrink-0 flex-col items-center gap-2 opacity-60">
+              <div className="hidden flex-shrink-0 flex-col items-center gap-2 opacity-60 md:flex">
                 <div className="h-16 w-px" style={{ background: "linear-gradient(to bottom,transparent,rgba(168,85,247,0.7))" }} />
                 <div className="h-3 w-3 rounded-full bg-purple-400" />
               </div>
             </div>
 
             {/* CTAs */}
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap">
               <motion.button
                 onClick={copy}
-                className="group relative flex items-center gap-2 overflow-hidden rounded-2xl px-7 py-3.5 text-sm font-bold text-white"
+                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-3.5 text-sm font-bold text-white sm:w-auto sm:justify-start sm:px-7"
                 style={{ background: "linear-gradient(135deg,#a855f7,#818cf8)" }}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
@@ -101,7 +101,7 @@ export default function ContactCTA() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass flex items-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-bold text-fade transition hover:glow-border hover:text-white"
+                  className="glass flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-bold text-fade transition hover:glow-border hover:text-white sm:w-auto sm:justify-start"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -112,7 +112,7 @@ export default function ContactCTA() {
             </div>
 
             {/* Email display */}
-            <div className="mt-8 flex w-fit flex-wrap items-center gap-2 sm:gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
+            <div className="mt-8 flex w-full flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:w-fit sm:gap-3 sm:px-5">
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="pulse-dot" style={{ background: "#a855f7", boxShadow: "0 0 0 0 rgba(168,85,247,0.5)" }} />
                 <span className="text-xs sm:text-sm text-fade whitespace-nowrap">Direct email:</span>

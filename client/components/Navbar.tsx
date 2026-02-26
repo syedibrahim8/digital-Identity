@@ -45,20 +45,20 @@ export default function Navbar() {
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
         <div
-          className={`mt-3 flex items-center justify-between rounded-2xl px-5 py-3 transition-all duration-500 ${scrolled
+          className={`mt-3 flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3 transition-all duration-500 ${scrolled
               ? "glass-strong shadow-[0_8px_40px_rgba(168,85,247,0.12)]"
               : "glass"
             }`}
         >
           {/* Logo */}
-          <a href="#top" className="group flex items-center gap-2">
+          <a href="#top" className="group flex min-w-0 items-center gap-2">
             <div
-              className="h-7 w-7 rounded-lg"
+              className="h-6 w-6 shrink-0 rounded-lg sm:h-7 sm:w-7"
               style={{ background: "linear-gradient(135deg,#a855f7,#38bdf8)" }}
             />
-            <span className="text-lg font-extrabold tracking-tight">
+            <span className="truncate text-base font-extrabold tracking-tight sm:text-lg">
               <span className="grad-purple">Ibrahim</span>
-              <span className="text-fade text-sm">.portfolio</span>
+              <span className="text-fade text-xs sm:text-sm">.portfolio</span>
             </span>
           </a>
 
