@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/*
+ * World: one engineering drawing set.
+ * Drafting vellum, graded line weights, red annotation ink, balloon callouts,
+ * a ruled title block on every sheet. Light ground is chosen from the use
+ * scene — a drawing is read flat on a table under room light — not from the
+ * category's dark-mode habit.
+ */
+/* `static` so every token is emitted: the sheet inks are referenced from SVG
+ * attributes and inline styles, which Tailwind cannot see, so a tree-shaken
+ * @theme silently drops them and the plates render black. */
+@theme static {
+  /* Vellum */
+  --color-vellum: #f0efe8;
+  --color-vellum-tint: #e6e4d9;
+  --color-vellum-deep: #d6d3c3;
+
+  /* Line weights. Drafting has exactly three, and they mean different things. */
+  --color-object: #1c1e1b; /* object line — the part itself */
+  --color-construct: #898a82; /* construction / hidden line — 3:1, non-text only */
+  --color-grid: #d9d7cb; /* underlying grid */
+
+  /* House annotation ink. Dimensions, leaders, balloons, revisions. Never decor. */
+  --color-annotate: #b5342a;
+
+  /* Reading text derived from the object line, not grey. */
+  --color-read: #33352f;
+  --color-read-soft: #5c5f55;
+
+  /* Sheet inks. One per module; identifies a subsystem across the set. */
+  --color-escrow: #146b72;
+  --color-fetcher: #90641c;
+  --color-lab: #2f4b8f;
+  --color-learning: #4a6b2a;
+
+  --font-display: var(--font-archivo-narrow), "Archivo Narrow", sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-dim: var(--font-martian), ui-monospace, "SF Mono", monospace;
+
+  --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    /* Lenis owns scroll; native smooth would fight it. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-vellum);
+    color: var(--color-read);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /*
+   * Browser surfaces ship with defaults belonging to no design system.
+   * Theme them: selection, focus ring, scrollbar, and figures.
+   */
+  ::selection {
+    background-color: var(--color-annotate);
+    color: var(--color-vellum);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-annotate);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-vellum-tint);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-construct);
+    border: 3px solid var(--color-vellum-tint);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-object);
+  }
+
+  /* Dimensions and serials must align down a column. */
+  [data-figures="tabular"],
+  table,
+  time {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    color: var(--color-object);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  /* Drafting lettering: uppercase, tracked, as lettered on a title block. */
+  .lettering {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Dimension text sits on its leader, small and monospaced. */
+  .dimension {
+    font-family: var(--font-dim);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    color: var(--color-annotate);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    transition: top 150ms var(--ease-house);
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
