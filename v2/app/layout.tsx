@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Archivo_Narrow, Martian_Mono } from "next/font/google";
 import { SITE } from "@/content/site";
+import { ScrollProvider } from "@/lib/scroll/ScrollProvider";
+import { ScrollRail } from "@/components/dom/ScrollRail";
+import { CommandPalette } from "@/components/dom/CommandPalette";
 import "./globals.css";
 
 /* Reading face. Grotesque workhorse with real tabular figures. */
@@ -68,7 +71,15 @@ export default function RootLayout({
         <a href="#main" className="skip-link bg-object text-vellum px-4 py-2 text-sm">
           Skip to content
         </a>
-        {children}
+        {/*
+          ScrollProvider is a Client Component, but `children` is passed through
+          it as a prop — so the whole page tree below stays server-rendered.
+        */}
+        <ScrollProvider>
+          {children}
+          <ScrollRail />
+          <CommandPalette />
+        </ScrollProvider>
       </body>
     </html>
   );

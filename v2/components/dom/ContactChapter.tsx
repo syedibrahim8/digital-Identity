@@ -12,7 +12,7 @@ const CHANNELS = [
 
 export function ContactChapter({ chapter }: { chapter: Chapter }) {
   return (
-    <ChapterSection chapter={chapter} sheet="08">
+    <ChapterSection chapter={chapter}>
       <h2 className="text-4xl sm:text-5xl">{chapter.title}</h2>
       <p className="text-read mt-6 max-w-[52ch] text-lg leading-relaxed">
         {chapter.body}

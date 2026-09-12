@@ -22,12 +22,12 @@ export function Nav() {
             {SITE.name}
           </a>
 
-          <ul className="hidden flex-1 items-center gap-6 md:flex">
+          <ul data-nav className="hidden flex-1 items-center gap-6 md:flex">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
-                  className="lettering text-read-soft hover:text-annotate text-[10px] transition-colors"
+                  className="lettering text-read-soft hover:text-annotate aria-[current]:text-annotate text-[10px] transition-colors"
                 >
                   {item.label}
                 </a>
@@ -57,12 +57,12 @@ export function Nav() {
                 className="size-3.5 transition-transform group-open:rotate-180"
               />
             </summary>
-            <ul className="border-object/25 bg-vellum absolute right-0 z-50 mt-2 min-w-44 border shadow-sm">
+            <ul data-nav className="border-object/25 bg-vellum absolute right-0 z-50 mt-2 min-w-44 border shadow-sm">
               {NAV_ITEMS.map((item) => (
                 <li key={item.id} className="border-object/15 border-b last:border-b-0">
                   <a
                     href={`#${item.id}`}
-                    className="lettering text-read-soft hover:text-annotate hover:bg-vellum-tint block px-4 py-3 text-[10px] transition-colors"
+                    className="lettering text-read-soft hover:text-annotate aria-[current]:text-annotate hover:bg-vellum-tint block px-4 py-3 text-[10px] transition-colors"
                   >
                     {item.label}
                   </a>

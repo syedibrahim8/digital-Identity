@@ -4,7 +4,7 @@ import { ChapterSection } from "./ChapterSection";
 
 export function StackChapter({ chapter }: { chapter: Chapter }) {
   return (
-    <ChapterSection chapter={chapter} sheet="06">
+    <ChapterSection chapter={chapter}>
       <h2 className="text-4xl sm:text-5xl">{chapter.title}</h2>
       <p className="text-read mt-6 max-w-[60ch] text-lg leading-relaxed">
         {chapter.body}

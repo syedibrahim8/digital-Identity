@@ -18,7 +18,7 @@ export function ProjectChapter({ chapter }: { chapter: Chapter }) {
   const ink = `var(--color-${project.ink})`;
 
   return (
-    <ChapterSection chapter={chapter} sheet={project.sheet} tint={ink}>
+    <ChapterSection chapter={chapter} tint={ink}>
       <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         <div>
           <h2 className="text-4xl sm:text-5xl" style={{ color: ink }}>
@@ -74,7 +74,7 @@ export function ProjectChapter({ chapter }: { chapter: Chapter }) {
                 style={{ color: ink }}
                 data-figures="tabular"
               >
-                {project.sheet}.{i + 1}
+                {chapter.sheet}.{i + 1}
               </dt>
               <dd className="text-read text-sm leading-relaxed">{h}</dd>
             </div>

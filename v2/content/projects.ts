@@ -34,8 +34,6 @@ export type SheetInk = "escrow" | "fetcher" | "lab" | "learning";
 export type Project = {
   id: string;
   slug: string;
-  /** Sheet number in the set, as printed in the title block. */
-  sheet: string;
   ink: SheetInk;
   title: string;
   /** One line. What it is, in plain language. */
@@ -54,7 +52,6 @@ export type Project = {
 export const PROJECTS: Project[] = [
   {
     id: "escrow",
-    sheet: "02",
     ink: "escrow",
     slug: "influencer-marketplace",
     title: "Influencer Marketplace",
@@ -74,7 +71,6 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "youtube-fetcher",
-    sheet: "03",
     ink: "fetcher",
     slug: "youtube-fetcher",
     title: "YouTube Video Fetcher",
@@ -96,7 +92,6 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "pokedex",
-    sheet: "04",
     ink: "lab",
     slug: "pokemon-research-lab",
     title: "Pokémon Research Lab",
@@ -118,7 +113,6 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "smartphone",
-    sheet: "05",
     ink: "learning",
     slug: "smartphone-learning",
     title: "Smartphone Learning Platform",

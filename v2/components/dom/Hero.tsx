@@ -35,8 +35,9 @@ export function Hero({ chapter }: { chapter: Chapter }) {
             </p>
 
             <p className="text-read mt-5 max-w-[58ch] leading-relaxed">
-              {SITE.role} working on workflow systems, scheduled pipelines, and
-              interfaces that stay fast as the data grows.
+              {SITE.role} in {SITE.location.split(",")[0]}, working on workflow
+              systems, scheduled pipelines, and interfaces that stay fast as the
+              data grows.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -67,12 +68,17 @@ export function Hero({ chapter }: { chapter: Chapter }) {
                 key={a.id}
                 className="text-read-soft flex gap-3 py-1 text-xs leading-relaxed"
               >
-                <span className="dimension shrink-0">{a.org}</span>
-                <span>{a.title}</span>
+                <span className="dimension shrink-0" data-figures="tabular">
+                  {a.year}
+                </span>
+                <span>
+                  {a.title}
+                  <span className="text-construct"> · {a.org}</span>
+                </span>
               </li>
             ))}
           </ul>
-          <TitleBlock system={chapter.system} sheet="00" />
+          <TitleBlock system={chapter.system} sheet={chapter.sheet} />
         </div>
       </div>
     </section>

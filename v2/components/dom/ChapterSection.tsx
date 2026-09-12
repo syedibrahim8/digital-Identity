@@ -15,12 +15,10 @@ import { TitleBlock } from "./TitleBlock";
  */
 export function ChapterSection({
   chapter,
-  sheet,
   tint,
   children,
 }: {
   chapter: Chapter;
-  sheet: string;
   tint?: string;
   children: ReactNode;
 }) {
@@ -39,7 +37,7 @@ export function ChapterSection({
           {children}
         </div>
         <div className="mx-auto flex w-full max-w-6xl justify-end px-5 pb-10 sm:px-8">
-          <TitleBlock system={chapter.system} sheet={sheet} tint={tint} />
+          <TitleBlock system={chapter.system} sheet={chapter.sheet} tint={tint} />
         </div>
       </div>
     </section>

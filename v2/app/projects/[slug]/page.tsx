@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Github } from "lucide-react";
 import { PROJECTS, getProject } from "@/content/projects";
+import { SHEET_BY_SLUG } from "@/content/chapters";
 
 /**
  * A static sheet per project.
@@ -36,6 +37,7 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   const ink = `var(--color-${project.ink})`;
+  const sheet = SHEET_BY_SLUG[project.slug] ?? "--";
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
@@ -48,7 +50,7 @@ export default async function ProjectPage({
       </Link>
 
       <p className="dimension mt-10" data-figures="tabular">
-        Sheet {project.sheet}
+        Sheet {sheet}
       </p>
       <h1 className="mt-2 text-4xl sm:text-5xl" style={{ color: ink }}>
         {project.title}
@@ -64,7 +66,7 @@ export default async function ProjectPage({
             style={{ borderColor: `color-mix(in oklab, ${ink} 35%, transparent)` }}
           >
             <dt className="dimension pt-0.5" style={{ color: ink }} data-figures="tabular">
-              {project.sheet}.{i + 1}
+              {sheet}.{i + 1}
             </dt>
             <dd className="text-read text-sm leading-relaxed">{h}</dd>
           </div>

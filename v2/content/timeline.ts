@@ -9,7 +9,6 @@
 
 export type TimelineEntry = {
   id: string;
-  /** TODO(ibrahim): confirm real dates. */
   period: string;
   title: string;
   detail: string;
@@ -19,28 +18,27 @@ export type TimelineEntry = {
 
 export const TIMELINE: TimelineEntry[] = [
   {
-    id: "start",
-    period: "2025",
-    title: "Started building in earnest",
-    detail:
-      "Moved from tutorials to shipping — first full-stack applications with real data and real users.",
-    kind: "milestone",
-  },
-  {
     id: "nasa-ames",
-    period: "TODO",
+    period: "2018",
     title: "NASA Ames Research Center",
     detail:
-      "Visited NASA Ames in connection with space settlement design work.",
+      "Visited NASA Ames while working on a space settlement design — the project that started the interest in systems that have to hold up under real constraints.",
     kind: "distinction",
   },
   {
     id: "nss",
-    period: "TODO",
-    title: "National Space Society — Space Settlement Conference",
+    period: "2018",
+    title: "Presented at the National Space Society conference",
     detail:
-      "Attended the NSS conference on space settlement design.",
+      "Presented a cylindrical colony sited at Earth–Moon L5, with four sector tubes for residence, agriculture, research and industry.",
     kind: "distinction",
+  },
+  {
+    id: "graduated",
+    period: "2026",
+    title: "B.E. Computer Science and Engineering",
+    detail: "Jawaharlal Nehru Technological University.",
+    kind: "milestone",
   },
   {
     id: "systems",
@@ -53,8 +51,8 @@ export const TIMELINE: TimelineEntry[] = [
   {
     id: "now",
     period: "Now",
-    title: "Open to fullstack roles",
-    detail: "Looking for problems with real constraints.",
+    title: "Open to full-stack roles",
+    detail: "Looking for problems with real constraints. Based in Hyderabad.",
     kind: "milestone",
   },
 ];

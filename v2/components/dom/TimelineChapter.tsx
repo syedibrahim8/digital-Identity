@@ -4,7 +4,7 @@ import { ChapterSection } from "./ChapterSection";
 
 export function TimelineChapter({ chapter }: { chapter: Chapter }) {
   return (
-    <ChapterSection chapter={chapter} sheet="07">
+    <ChapterSection chapter={chapter}>
       <h2 className="text-4xl sm:text-5xl">{chapter.title}</h2>
 
       {/* The spine, drawn as a datum line with stations along it. */}

@@ -1,4 +1,5 @@
 import { PROJECTS } from "@/content/projects";
+import { SHEET_BY_SLUG } from "@/content/chapters";
 
 /**
  * The exploded axonometric, drawn as static SVG.
@@ -40,7 +41,7 @@ export function AssemblyPlate({ className = "" }: { className?: string }) {
       id: p.id,
       label: p.title,
       ink: `var(--color-${p.ink})`,
-      sheet: p.sheet,
+      sheet: SHEET_BY_SLUG[p.slug] ?? "--",
     })),
   ];
 

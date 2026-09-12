@@ -9,14 +9,16 @@ export const SITE = {
   name: "Syed Ibrahim Ali",
   /** Short form for tight spaces (nav, footer, OG). */
   shortName: "Ibrahim",
-  role: "Fullstack Engineer",
+  role: "Full Stack Developer",
   /** The positioning line. Appears in the hero and in OG metadata. */
   tagline: "I build systems, not websites.",
-  /** TODO(ibrahim): confirm city + timezone. */
-  location: "India",
+  location: "Hyderabad, India",
   timezone: "IST (UTC+5:30)",
-  /** TODO(ibrahim): confirm availability wording. */
-  availability: "Open to fullstack roles",
+  /**
+   * Signals "recent graduate" without leading with the word fresher, which
+   * reads as a discount rather than a fact. The graduation year carries it.
+   */
+  availability: "Open to full-stack roles",
 
   /** Placeholders carried from the previous site — safe to edit, used everywhere. */
   links: {
@@ -37,7 +39,6 @@ export type Achievement = {
   id: string;
   title: string;
   org: string;
-  /** TODO(ibrahim): fill real years. */
   year?: string;
   detail: string;
 };
@@ -47,14 +48,15 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: "nasa-ames",
     title: "NASA Ames Research Center",
     org: "NASA",
-    detail:
-      "Visited NASA Ames Research Center in connection with space settlement design work.",
+    year: "2018",
+    detail: "Visited NASA Ames for space settlement design work.",
   },
   {
     id: "nss-conference",
-    title: "Space Settlement Conference",
+    title: "Presented a space settlement project",
     org: "National Space Society",
+    year: "2018",
     detail:
-      "Attended the National Space Society conference on space settlement design.",
+      "Presented a space settlement design at the National Space Society conference.",
   },
 ];

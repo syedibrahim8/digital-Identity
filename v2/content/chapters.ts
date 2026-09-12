@@ -13,6 +13,7 @@ export type ChapterKind =
   | "convergence"
   | "current"
   | "project"
+  | "settlement"
   | "journey"
   | "system";
 
@@ -32,9 +33,17 @@ export type Chapter = {
   weight: number;
   /** Set for kind === "project". */
   projectSlug?: string;
+  /**
+   * Sheet number as printed in the title block. Assigned below from position in
+   * the set, never hand-written: two numbering systems on screen at once (a
+   * rail counting one way, a title block another) reads as a bug.
+   */
+  sheet: string;
 };
 
-const OPENING: Chapter[] = [
+type UnnumberedChapter = Omit<Chapter, "sheet">;
+
+const OPENING: UnnumberedChapter[] = [
   {
     id: "cold-start",
     kind: "cold-start",
@@ -50,7 +59,13 @@ const OPENING: Chapter[] = [
     navLabel: "About",
     system: "Convergence",
     title: "Parts become a system",
-    body: "I build the parts of software that have to be correct when nobody is watching — workflows that enforce their own rules, jobs that keep running, data that stays fast as it grows.",
+    /*
+     * Origin story — drafted by Claude at Ibrahim's request, from his own
+     * material (the 2018 L5 design, and the coupling instinct that shows up
+     * again in the escrow work). Replace freely; this is the one paragraph on
+     * the site that should sound like nobody else.
+     */
+    body: "In 2018 I designed a space colony, and it taught me the thing that still shapes how I build: in a real system, nothing stands alone. Move the radius and the gravity moves with it, and the farmland, and the shielding. Software behaves the same way. The interesting part was never the screen — it is the rules underneath, the ones that have to hold when nobody is watching.",
     weight: 1.4,
   },
   {
@@ -64,7 +79,7 @@ const OPENING: Chapter[] = [
   },
 ];
 
-const PROJECT_CHAPTERS: Chapter[] = PROJECTS.map((p) => ({
+const PROJECT_CHAPTERS: UnnumberedChapter[] = PROJECTS.map((p) => ({
   id: `project-${p.id}`,
   kind: "project" as const,
   navLabel: p.title,
@@ -76,7 +91,15 @@ const PROJECT_CHAPTERS: Chapter[] = PROJECTS.map((p) => ({
   projectSlug: p.slug,
 }));
 
-const CLOSING: Chapter[] = [
+const CLOSING: UnnumberedChapter[] = [
+  {
+    id: "settlement",
+    kind: "settlement",
+    navLabel: "Settlement",
+    system: "Distinction",
+    title: "Space settlement, 2018",
+    weight: 1.8,
+  },
   {
     id: "journey",
     kind: "journey",
@@ -100,7 +123,15 @@ export const CHAPTERS: Chapter[] = [
   ...OPENING,
   ...PROJECT_CHAPTERS,
   ...CLOSING,
-];
+].map((chapter, index) => ({
+  ...chapter,
+  sheet: String(index).padStart(2, "0"),
+}));
+
+/** Sheet number for a project slug — the static route has no Chapter to hand. */
+export const SHEET_BY_SLUG: Record<string, string> = Object.fromEntries(
+  CHAPTERS.filter((c) => c.projectSlug).map((c) => [c.projectSlug!, c.sheet]),
+);
 
 /**
  * Nav items. The four project chapters collapse into a single "Projects" jump —

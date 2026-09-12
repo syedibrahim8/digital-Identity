@@ -24,7 +24,7 @@ const PRINCIPLES = [
 
 export function Convergence({ chapter }: { chapter: Chapter }) {
   return (
-    <ChapterSection chapter={chapter} sheet="01">
+    <ChapterSection chapter={chapter}>
       <h2 className="max-w-2xl text-4xl sm:text-5xl">{chapter.title}</h2>
       <p className="text-read mt-6 max-w-[68ch] text-lg leading-relaxed">
         {chapter.body}

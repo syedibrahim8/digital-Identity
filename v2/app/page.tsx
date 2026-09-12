@@ -4,6 +4,7 @@ import { Hero } from "@/components/dom/Hero";
 import { Convergence } from "@/components/dom/Convergence";
 import { StackChapter } from "@/components/dom/StackChapter";
 import { ProjectChapter } from "@/components/dom/ProjectChapter";
+import { SettlementChapter } from "@/components/dom/SettlementChapter";
 import { TimelineChapter } from "@/components/dom/TimelineChapter";
 import { ContactChapter } from "@/components/dom/ContactChapter";
 import { Footer } from "@/components/dom/Footer";
@@ -31,6 +32,8 @@ export default function Page() {
               return <StackChapter key={chapter.id} chapter={chapter} />;
             case "project":
               return <ProjectChapter key={chapter.id} chapter={chapter} />;
+            case "settlement":
+              return <SettlementChapter key={chapter.id} chapter={chapter} />;
             case "journey":
               return <TimelineChapter key={chapter.id} chapter={chapter} />;
             case "system":
