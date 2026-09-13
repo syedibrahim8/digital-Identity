@@ -8,6 +8,7 @@ import { SettlementChapter } from "@/components/dom/SettlementChapter";
 import { TimelineChapter } from "@/components/dom/TimelineChapter";
 import { ContactChapter } from "@/components/dom/ContactChapter";
 import { Footer } from "@/components/dom/Footer";
+import { SignaturePreloader } from "@/components/dom/SignaturePreloader";
 
 /**
  * The whole drawing set, rendered from CHAPTERS.
@@ -20,6 +21,8 @@ import { Footer } from "@/components/dom/Footer";
 export default function Page() {
   return (
     <>
+      {/* First in the document, so it covers the sheet from the first painted frame. */}
+      <SignaturePreloader />
       <Nav />
       <main id="main" className="relative z-10">
         {CHAPTERS.map((chapter) => {

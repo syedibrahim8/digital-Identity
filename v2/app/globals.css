@@ -136,6 +136,91 @@
   }
 }
 
+/*
+ * Signature preloader (components/dom/SignaturePreloader.tsx).
+ *
+ * Inert until its pre-paint script sets [data-play], so no-JS visits, repeat
+ * visits and deep links never see it. The component supplies the sequence
+ * timings; each stroke carries its own start, duration and velocity profile.
+ */
+.sig-preloader {
+  display: none;
+}
+
+.sig-preloader[data-play] {
+  position: fixed;
+  inset: 0;
+  /* Above nav and palette, below the skip link so Tab lands somewhere visible. */
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding-inline: 1.5rem;
+  background-color: var(--color-vellum);
+  color: var(--color-object);
+  animation: sig-veil var(--sig-veil-ms) cubic-bezier(0.4, 0, 0.2, 1) var(--sig-veil-at) both;
+}
+
+.sig-preloader[data-leaving] {
+  pointer-events: none;
+}
+
+.sig-mark {
+  /* The gutter's width on a phone; capped on wide and short screens so the
+     hand stays a signature rather than a banner. */
+  width: min(42rem, 100%);
+  width: min(42rem, 100%, 120dvh);
+  height: auto;
+  /* The optical centre sits a touch above the geometric one. */
+  margin-bottom: 4vh;
+  overflow: visible;
+  animation: sig-lift var(--sig-lift-ms) cubic-bezier(0.45, 0, 0.2, 1) var(--sig-exit-at) both;
+}
+
+.sig-pen {
+  /* pathLength=1: a dash of 1 is the whole stroke; the gap of 2 keeps the
+     pattern's next dash from wrapping onto the path end. */
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.002;
+  animation-name: sig-write;
+  animation-duration: var(--sig-dur);
+  /* A linear() velocity profile; browsers without linear() fall back to ease. */
+  animation-timing-function: var(--sig-ease);
+  animation-delay: calc(var(--sig-lead) + var(--sig-start));
+  animation-fill-mode: forwards;
+}
+
+/* Ink that pooled past the pen's width (reversals, pressure). */
+.sig-pool {
+  opacity: 0;
+  animation: sig-pool 70ms linear calc(var(--sig-lead) + var(--sig-start)) forwards;
+}
+
+@keyframes sig-write {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sig-pool {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sig-lift {
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes sig-veil {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -143,5 +228,21 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* No writing and no lift: the signature is simply there, then a short fade. */
+  .sig-pen,
+  .sig-pool,
+  .sig-mark {
+    animation: none !important;
+  }
+  .sig-pen {
+    stroke-dashoffset: 0;
+  }
+  .sig-pool {
+    opacity: 1;
+  }
+  .sig-preloader[data-play] {
+    animation: sig-veil 220ms linear 480ms both !important;
   }
 }

@@ -44,8 +44,14 @@ export function ScrollProvider({ children }: { children: React.ReactNode }) {
         smoothWheel: !reduced,
         lerp: reduced ? 1 : 0.1,
         syncTouch: false,
-        // Handed to R3F's loop the moment the canvas mounts.
-        autoRaf: !canvasDriving,
+        /*
+         * Never self-drive. Lenis reads `this.options.autoRaf` inside its own
+         * raf callback and re-schedules when true — so calling raf() manually
+         * while autoRaf is on spawns an additional self-perpetuating chain on
+         * every tick. Ownership is explicit instead: R3F's loop when the canvas
+         * is up, the loop below when it is not.
+         */
+        autoRaf: false,
       }}
     >
       <ScrollDriver reduced={reduced} canvasDriving={canvasDriving} />
@@ -95,12 +101,23 @@ function ScrollDriver({
     };
   }, [remeasure]);
 
-  /* Commit here only while Lenis owns the loop. With the canvas mounted, the
-     driver inside it commits instead — so state is written exactly once. */
-  useLenis((instance) => {
-    if (canvasDriving) return;
-    commitScroll(instance);
-  });
+  /*
+   * The fallback frame loop: runs only when there is no canvas (tier 0,
+   * reduced motion, no WebGL). With the canvas mounted, useScrollDriver inside
+   * it ticks Lenis instead, so exactly one loop exists at any moment.
+   */
+  useEffect(() => {
+    if (!lenis || canvasDriving) return;
+
+    let frame = 0;
+    const tick = (time: number) => {
+      lenis.raf(time);
+      commitScroll(lenis);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [lenis, canvasDriving]);
 
   /*
    * Route every in-page anchor through Lenis.

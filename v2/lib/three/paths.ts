@@ -61,17 +61,25 @@ const MAX_INDEX = Math.max(1, STATIONS.length - 1);
  * already produced, rather than re-deriving position from raw scroll — so the
  * camera and the visible section cannot disagree.
  */
+/**
+ * Position along the flight, 0..1, matching station indices.
+ *
+ * This — not raw document scroll — is what anything positioned by station must
+ * use. Chapter weights differ (the centrepiece is nearly twice a normal sheet),
+ * so document progress and flight position drift apart, and driving the machine
+ * by the wrong one puts its assembly front nowhere near the camera.
+ */
+export function flightParam(chapterIndex: number, chapterT: number): number {
+  return MathUtils.clamp((chapterIndex + dwell(chapterT)) / MAX_INDEX, 0, 1);
+}
+
 export function sampleFlight(
   chapterIndex: number,
   chapterT: number,
   outCamera: Vector3,
   outTarget: Vector3,
 ) {
-  const u = MathUtils.clamp(
-    (chapterIndex + dwell(chapterT)) / MAX_INDEX,
-    0,
-    1,
-  );
+  const u = flightParam(chapterIndex, chapterT);
   cameraCurve.getPointAt(u, outCamera);
   targetCurve.getPointAt(u, outTarget);
 }

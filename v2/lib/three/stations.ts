@@ -33,7 +33,8 @@ export type Station = {
 const DEPTH = 26; // travel along -Z per chapter
 const DROP = 5.5; // descent per chapter
 const SWING = 9; // lateral offset, alternating
-const GAZE_BIAS = 7.5; // how far left of the subject the camera aims
+const CAMERA_OFFSET = 20; // camera always this far left of the spine
+const GAZE_BIAS = 10; // how far left of the subject the camera aims
 
 export const STATIONS: Station[] = CHAPTERS.map((chapter, i) => {
   const side = i % 2 === 0 ? 1 : -1;
@@ -46,14 +47,20 @@ export const STATIONS: Station[] = CHAPTERS.map((chapter, i) => {
     -i * DEPTH,
   );
 
+  /*
+   * The camera sits on ONE side of the spine at every station, never
+   * alternating. Alternating put the camera path across the spine, so the
+   * flight passed through the truss and the structure ended up over the copy.
+   * A constant offset means it always runs alongside, on the right.
+   */
   const camera = new Vector3(
-    subject.x - side * 4,
+    subject.x - CAMERA_OFFSET,
     subject.y + 2.6,
-    subject.z + 26,
+    subject.z + 40,
   );
 
-  // Look left of the subject so it composes into the right of the frame,
-  // opposite the copy column.
+  // Aim partway back toward the copy, so the machine composes into the right
+  // third rather than dead centre.
   const gaze = new Vector3(subject.x - GAZE_BIAS, subject.y - 0.6, subject.z);
 
   return { id: chapter.id, subject, camera, gaze };

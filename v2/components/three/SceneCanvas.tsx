@@ -3,7 +3,8 @@
 import { Canvas } from "@react-three/fiber";
 import { useScrollDriver } from "@/lib/scroll/useScrollDriver";
 import { CameraRig } from "./CameraRig";
-import { StationMarkers } from "./StationMarkers";
+import { Machine } from "./Machine";
+import { SheetGrid } from "./SheetGrid";
 import type { Tier } from "@/lib/quality/detectTier";
 
 /**
@@ -34,10 +35,18 @@ export default function SceneCanvas({ tier }: { tier: Tier }) {
         camera={{ fov: 42, near: 0.1, far: 600 }}
         // No lights and no shading: everything is line geometry.
         flat
+        /*
+         * R3F's own wrapper sets an inline `pointer-events: auto`, which undoes
+         * the `pointer-events-none` above — and the canvas then swallows clicks
+         * on anything not stacked over z-0 (the footer, every project page).
+         * Pointer and click input for the scene is read from `window` instead.
+         */
+        style={{ pointerEvents: "none" }}
       >
         <Driver />
         <CameraRig />
-        <StationMarkers />
+        <SheetGrid opacity={tier >= 2 ? 0.5 : 0.35} />
+        <Machine tier={tier} />
         <fog attach="fog" args={["#f0efe8", 40, 240]} />
       </Canvas>
     </div>
