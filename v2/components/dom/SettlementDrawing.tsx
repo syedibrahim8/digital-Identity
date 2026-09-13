@@ -1,125 +1,119 @@
 import { SETTLEMENT } from "@/content/settlement";
 
 /**
- * The habitat, as a two-view engineering drawing: an end section looking down
- * the spin axis, and a side elevation showing length.
+ * The habitat: a central shaft with four tori threaded along it, each spinning
+ * about the shaft axis to produce gravity in its own sector.
  *
- * Two views rather than one because four tubes distributed around an axis
- * collapse into an unreadable tangle in a single elevation — which is exactly
- * why real drawing sheets carry a section alongside the elevation.
+ * Drawn as a single elevation because the arrangement is unambiguous from the
+ * side — four stacked rings on a vertical spindle read instantly, where four
+ * tubes distributed around an axis would not.
+ *
+ * Each torus is an annulus path with fill-rule evenodd, so the ring occludes
+ * the shaft behind it while the shaft stays visible through the hole. That one
+ * detail is what stops it reading as four flat washers.
  *
  * SVG, not WebGL, deliberately: this is the tier-0 rendering that
  * reduced-motion visitors, no-WebGL browsers and crawlers get permanently.
- * Phase 4 layers a real rotating hull over it; this drawing stays underneath.
+ * Phase 4 layers real rotating geometry over it; this drawing stays underneath.
  */
 
-// End section, looking along the spin axis.
-const SEC_X = -108;
-const HULL_R = 38;
-const TUBE_R = 14;
-const TUBE_ORBIT = 66;
-const BALLOON_ORBIT = 94;
+const SHAFT_RX = 14;
+const SHAFT_CAP_RY = 5.5;
+const SHAFT_TOP = -238;
+const SHAFT_BOTTOM = 238;
 
-// Side elevation.
-const ELEV_X = 118;
-const ELEV_HALF = 84;
-const ELEV_RY = 30;
-const ELEV_CAP_RX = 11;
+const RING_R = 76; // torus major radius
+const TUBE_R = 21; // torus minor radius
+const TILT = 0.33; // viewing tilt: how open the rings read
 
-function polar(deg: number, r: number) {
-  const rad = (deg * Math.PI) / 180;
-  return [r * Math.cos(rad), r * Math.sin(rad)] as const;
+const OUTER_RX = RING_R + TUBE_R;
+const OUTER_RY = OUTER_RX * TILT;
+const INNER_RX = RING_R - TUBE_R;
+const INNER_RY = INNER_RX * TILT;
+
+const BALLOON_X = 150;
+const LEVELS = [-132, -44, 44, 132];
+
+/** An ellipse as a path, so two can share one evenodd fill. */
+function ellipsePath(rx: number, ry: number) {
+  return `M ${-rx},0 a ${rx},${ry} 0 1,0 ${rx * 2},0 a ${rx},${ry} 0 1,0 ${-rx * 2},0 Z`;
 }
 
+const ANNULUS = `${ellipsePath(OUTER_RX, OUTER_RY)} ${ellipsePath(INNER_RX, INNER_RY)}`;
+
 export function SettlementDrawing({ className = "" }: { className?: string }) {
-  // Sectors at the four cardinal positions around the hull.
-  const sectors = SETTLEMENT.sectors.map((sector, i) => ({
-    ...sector,
-    angle: i * 90 - 90,
-  }));
+  const rings = SETTLEMENT.sectors.map((sector, i) => ({ ...sector, y: LEVELS[i] }));
 
   return (
     <svg
-      viewBox="-220 -128 440 256"
+      viewBox="-125 -258 300 516"
       className={className}
       role="img"
-      aria-label="Two-view engineering drawing of the settlement: an end section showing a central pressurised hull with four sector tubes arranged around it, and a side elevation showing the cylinder's length"
+      aria-label="Engineering elevation of the settlement: a central cylindrical shaft with four tori threaded along it, each spinning about the shaft axis, numbered for their four sectors"
     >
-      {/* ---------- END SECTION ---------- */}
-      <g>
-        {/* Centre lines. */}
-        <line x1={SEC_X - BALLOON_ORBIT} y1="0" x2={SEC_X + BALLOON_ORBIT} y2="0" stroke="var(--color-construct)" strokeWidth="0.6" strokeDasharray="10 4 2 4" />
-        <line x1={SEC_X} y1={-BALLOON_ORBIT} x2={SEC_X} y2={BALLOON_ORBIT} stroke="var(--color-construct)" strokeWidth="0.6" strokeDasharray="10 4 2 4" />
+      {/* Spin axis. */}
+      <line
+        x1="0"
+        y1={SHAFT_TOP - 14}
+        x2="0"
+        y2={SHAFT_BOTTOM + 14}
+        stroke="var(--color-construct)"
+        strokeWidth="0.7"
+        strokeDasharray="12 4 2 4"
+      />
 
-        {sectors.map((sector) => {
-          const [tx, ty] = polar(sector.angle, TUBE_ORBIT);
-          const [sx, sy] = polar(sector.angle, HULL_R);
-          const [ex, ey] = polar(sector.angle, TUBE_ORBIT - TUBE_R);
-          const [bx, by] = polar(sector.angle, BALLOON_ORBIT);
-          return (
-            <g key={sector.n}>
-              {/* Strut from hull to sector tube. */}
-              <line x1={SEC_X + sx} y1={sy} x2={SEC_X + ex} y2={ey} stroke="var(--color-object)" strokeWidth="1" />
-              {/* The sector tube in section. */}
-              <circle cx={SEC_X + tx} cy={ty} r={TUBE_R} fill="var(--color-vellum)" stroke="var(--color-object)" strokeWidth="1.2" />
-              {/* Balloon. */}
-              <circle cx={SEC_X + bx} cy={by} r="10" fill="var(--color-vellum)" stroke="var(--color-annotate)" strokeWidth="0.9" />
-              <text x={SEC_X + bx} y={by + 3.5} textAnchor="middle" fill="var(--color-annotate)" style={{ fontFamily: "var(--font-dim)", fontSize: "10px" }}>
-                {sector.n}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Pressurised hull, drawn last so struts terminate under it. */}
-        <circle cx={SEC_X} cy="0" r={HULL_R} fill="var(--color-vellum)" stroke="var(--color-object)" strokeWidth="1.5" />
-        {/* Section hatching, the convention for cut material. */}
-        <circle cx={SEC_X} cy="0" r={HULL_R * 0.62} fill="none" stroke="var(--color-object)" strokeWidth="0.7" />
-
-        {/* Rotation, which is what produces gravity in the tubes. */}
-        <g stroke="var(--color-annotate)" strokeWidth="0.9" fill="none">
-          <path d={`M ${SEC_X - 14} ${-HULL_R * 0.42} A 16 16 0 0 1 ${SEC_X + 14} ${-HULL_R * 0.42}`} />
-          <path d={`M ${SEC_X + 9} ${-HULL_R * 0.42 - 5} L ${SEC_X + 15} ${-HULL_R * 0.42} L ${SEC_X + 9} ${-HULL_R * 0.42 + 4}`} />
-        </g>
-
-        <text x={SEC_X} y="118" textAnchor="middle" fill="var(--color-read-soft)" style={{ fontFamily: "var(--font-dim)", fontSize: "9px" }}>
-          SECTION A–A
-        </text>
+      {/* The shaft, drawn first so each ring occludes it. */}
+      <g stroke="var(--color-object)" strokeWidth="1.4" fill="none">
+        <line x1={-SHAFT_RX} y1={SHAFT_TOP} x2={-SHAFT_RX} y2={SHAFT_BOTTOM} />
+        <line x1={SHAFT_RX} y1={SHAFT_TOP} x2={SHAFT_RX} y2={SHAFT_BOTTOM} />
+        <ellipse cx="0" cy={SHAFT_TOP} rx={SHAFT_RX} ry={SHAFT_CAP_RY} fill="var(--color-vellum)" />
+        <ellipse cx="0" cy={SHAFT_BOTTOM} rx={SHAFT_RX} ry={SHAFT_CAP_RY} fill="var(--color-vellum)" />
       </g>
 
-      {/* ---------- SIDE ELEVATION ---------- */}
-      <g>
-        <line x1={ELEV_X - ELEV_HALF - 26} y1="0" x2={ELEV_X + ELEV_HALF + 26} y2="0" stroke="var(--color-construct)" strokeWidth="0.6" strokeDasharray="10 4 2 4" />
+      {rings.map((ring) => (
+        <g key={ring.n} transform={`translate(0 ${ring.y})`}>
+          {/* Ring body: occludes the shaft behind it, leaves the hole open. */}
+          <path d={ANNULUS} fillRule="evenodd" fill="var(--color-vellum)" />
 
-        {/* Sector tubes read as two bands above and below the hull. */}
-        {[-1, 1].map((side) => (
-          <g key={side}>
-            <line x1={ELEV_X - ELEV_HALF + 8} y1={side * TUBE_ORBIT * 0.82} x2={ELEV_X + ELEV_HALF - 8} y2={side * TUBE_ORBIT * 0.82} stroke="var(--color-object)" strokeWidth="1.1" />
-            <line x1={ELEV_X - ELEV_HALF + 8} y1={side * (TUBE_ORBIT * 0.82 - TUBE_R * 0.9)} x2={ELEV_X + ELEV_HALF - 8} y2={side * (TUBE_ORBIT * 0.82 - TUBE_R * 0.9)} stroke="var(--color-object)" strokeWidth="1.1" />
-            <ellipse cx={ELEV_X + ELEV_HALF - 8} cy={side * (TUBE_ORBIT * 0.82 - TUBE_R * 0.45)} rx="5" ry={TUBE_R * 0.45} fill="var(--color-vellum)" stroke="var(--color-object)" strokeWidth="1" />
-            {/* Struts. */}
-            {[-0.5, 0.5].map((at) => (
-              <line key={at} x1={ELEV_X + at * ELEV_HALF} y1={side * ELEV_RY} x2={ELEV_X + at * ELEV_HALF} y2={side * (TUBE_ORBIT * 0.82 - TUBE_R * 0.9)} stroke="var(--color-object)" strokeWidth="0.9" />
-            ))}
+          {/* Silhouette and hole. */}
+          <ellipse cx="0" cy="0" rx={OUTER_RX} ry={OUTER_RY} fill="none" stroke="var(--color-object)" strokeWidth="1.4" />
+          <ellipse cx="0" cy="0" rx={INNER_RX} ry={INNER_RY} fill="none" stroke="var(--color-object)" strokeWidth="1.1" />
+
+          {/* Tube cross-sections at the extremes — what makes it a torus, not a washer. */}
+          <circle cx={-RING_R} cy="0" r={TUBE_R} fill="none" stroke="var(--color-object)" strokeWidth="0.8" opacity="0.5" />
+          <circle cx={RING_R} cy="0" r={TUBE_R} fill="none" stroke="var(--color-object)" strokeWidth="0.8" opacity="0.5" />
+
+          {/* Rotation about the shaft axis — this is what makes the gravity. */}
+          <g stroke="var(--color-annotate)" strokeWidth="0.9" fill="none">
+            <path d={`M ${-OUTER_RX - 8} -6 A 14 14 0 0 1 ${-OUTER_RX - 8} 12`} />
+            <path d={`M ${-OUTER_RX - 12} 8 L ${-OUTER_RX - 8} 13 L ${-OUTER_RX - 3} 9`} />
           </g>
-        ))}
 
-        {/* The hull. */}
-        <ellipse cx={ELEV_X - ELEV_HALF} cy="0" rx={ELEV_CAP_RX} ry={ELEV_RY} fill="none" stroke="var(--color-construct)" strokeWidth="0.7" strokeDasharray="4 3" />
-        <line x1={ELEV_X - ELEV_HALF} y1={-ELEV_RY} x2={ELEV_X + ELEV_HALF} y2={-ELEV_RY} stroke="var(--color-object)" strokeWidth="1.5" />
-        <line x1={ELEV_X - ELEV_HALF} y1={ELEV_RY} x2={ELEV_X + ELEV_HALF} y2={ELEV_RY} stroke="var(--color-object)" strokeWidth="1.5" />
-        <ellipse cx={ELEV_X + ELEV_HALF} cy="0" rx={ELEV_CAP_RX} ry={ELEV_RY} fill="var(--color-vellum)" stroke="var(--color-object)" strokeWidth="1.5" />
-
-        {/* Length dimension with terminators. */}
-        <g stroke="var(--color-annotate)" strokeWidth="0.8">
-          <line x1={ELEV_X - ELEV_HALF} y1="96" x2={ELEV_X + ELEV_HALF} y2="96" />
-          <line x1={ELEV_X - ELEV_HALF} y1="90" x2={ELEV_X - ELEV_HALF} y2="102" />
-          <line x1={ELEV_X + ELEV_HALF} y1="90" x2={ELEV_X + ELEV_HALF} y2="102" />
+          {/* Balloon callout. */}
+          <line x1={OUTER_RX - 2} y1="-4" x2={BALLOON_X - 11} y2="-10" stroke="var(--color-annotate)" strokeWidth="0.8" />
+          <circle cx={BALLOON_X} cy="-10" r="11" fill="var(--color-vellum)" stroke="var(--color-annotate)" strokeWidth="0.9" />
+          <text
+            x={BALLOON_X}
+            y="-6"
+            textAnchor="middle"
+            fill="var(--color-annotate)"
+            style={{ fontFamily: "var(--font-dim)", fontSize: "10px" }}
+          >
+            {ring.n}
+          </text>
         </g>
-        <text x={ELEV_X} y="118" textAnchor="middle" fill="var(--color-read-soft)" style={{ fontFamily: "var(--font-dim)", fontSize: "9px" }}>
-          ELEVATION
-        </text>
-      </g>
+      ))}
+
+      {/* Shaft label, as a drawing carries it. */}
+      <line x1={SHAFT_RX} y1={SHAFT_TOP + 26} x2={BALLOON_X - 34} y2={SHAFT_TOP + 12} stroke="var(--color-annotate)" strokeWidth="0.8" />
+      <text
+        x={BALLOON_X - 30}
+        y={SHAFT_TOP + 15}
+        fill="var(--color-annotate)"
+        style={{ fontFamily: "var(--font-dim)", fontSize: "9px" }}
+      >
+        SHAFT
+      </text>
     </svg>
   );
 }

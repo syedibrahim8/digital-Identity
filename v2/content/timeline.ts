@@ -30,7 +30,7 @@ export const TIMELINE: TimelineEntry[] = [
     period: "2018",
     title: "Presented at the National Space Society conference",
     detail:
-      "Presented a cylindrical colony sited at Earth–Moon L5, with four sector tubes for residence, agriculture, research and industry.",
+      "Presented a colony sited at Earth–Moon L5: a central shaft carrying four rotating tori for residence, agriculture, research and industry.",
     kind: "distinction",
   },
   {

@@ -1,4 +1,6 @@
 import { motionValue } from "framer-motion";
+import type Lenis from "lenis";
+import type { ChapterRange } from "./measure";
 
 /**
  * Scroll state, in two tiers.
@@ -20,7 +22,7 @@ export type ScrollState = {
   velocity: number;
   /** Index into CHAPTERS. */
   chapterIndex: number;
-  /** 0..1 within the current chapter. Drives the camera dwell in Phase 2. */
+  /** 0..1 within the current chapter. Drives the camera dwell. */
   chapterT: number;
 };
 
@@ -33,3 +35,13 @@ export const scrollState: ScrollState = {
 
 export const progressMV = motionValue(0);
 export const chapterTMV = motionValue(0);
+
+/** Measured chapter bounds. Written by ScrollProvider, read by both drivers. */
+export const ranges: { current: ChapterRange[] } = { current: [] };
+
+/**
+ * The Lenis instance, reached as a module singleton rather than through React
+ * context: the R3F canvas is a separate reconciler root, and context bridging
+ * across it is a dependency we do not need to take.
+ */
+export const lenisHandle: { current: Lenis | null } = { current: null };

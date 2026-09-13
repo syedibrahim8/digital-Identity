@@ -75,7 +75,7 @@ export function SettlementChapter({ chapter }: { chapter: Chapter }) {
         </div>
 
         <div>
-          <SettlementDrawing className="w-full" />
+          <SettlementDrawing className="mx-auto h-[52vh] max-h-[460px] w-auto" />
 
           {/* Reference documents, pinned to the sheet as a drawing set carries. */}
           <ul className="mt-8 grid grid-cols-3 gap-4">

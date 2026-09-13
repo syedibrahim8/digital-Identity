@@ -4,6 +4,7 @@ import { SITE } from "@/content/site";
 import { ScrollProvider } from "@/lib/scroll/ScrollProvider";
 import { ScrollRail } from "@/components/dom/ScrollRail";
 import { CommandPalette } from "@/components/dom/CommandPalette";
+import { SceneMount } from "@/components/three/SceneMount";
 import "./globals.css";
 
 /* Reading face. Grotesque workhorse with real tabular figures. */
@@ -76,6 +77,7 @@ export default function RootLayout({
           it as a prop — so the whole page tree below stays server-rendered.
         */}
         <ScrollProvider>
+          <SceneMount />
           {children}
           <ScrollRail />
           <CommandPalette />

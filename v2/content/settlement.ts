@@ -43,7 +43,7 @@ export const SETTLEMENT = {
   body:
     "L4 and L5 sit at the corners of an equilateral triangle with Earth and the Moon, and unlike the other Lagrange points they are stable — objects settle into them rather than drifting out, which is why Trojan asteroids accumulate at Jupiter's. That makes L5 the cheapest place to put something permanent: it stays put on its own, it is days from Earth rather than months, and it can be built and supplied from lunar material instead of lifting every tonne out of Earth's gravity well.",
 
-  /** The habitat: one pressurised cylinder with four sector tubes. */
+  /** The habitat: four tori threaded on a central shaft, each spinning for gravity. */
   sectors: [
     { n: "1", name: "Residential", detail: "Housing and daily life." },
     { n: "2", name: "Agriculture", detail: "Food production and the closed water loop." },
@@ -58,7 +58,7 @@ export const SETTLEMENT = {
    * design. Add rows here if the originals turn up.
    */
   specs: [
-    { label: "Habitat", value: "Cylinder, four sector tubes" },
+    { label: "Habitat", value: "Central shaft, four rotating tori" },
     { label: "Station", value: "Earth–Moon L5" },
     { label: "Sectors", value: "4" },
     { label: "Presented", value: "2018" },

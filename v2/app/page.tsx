@@ -21,7 +21,7 @@ export default function Page() {
   return (
     <>
       <Nav />
-      <main id="main">
+      <main id="main" className="relative z-10">
         {CHAPTERS.map((chapter) => {
           switch (chapter.kind) {
             case "cold-start":

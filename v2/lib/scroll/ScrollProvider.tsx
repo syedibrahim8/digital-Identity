@@ -1,15 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
-import { CHAPTERS, FIRST_PROJECT_INDEX } from "@/content/chapters";
 import { PROJECTS } from "@/content/projects";
-import {
-  measureChapters,
-  resolveChapter,
-  type ChapterRange,
-} from "./measure";
-import { progressMV, chapterTMV, scrollState } from "./store";
+import { useUIStore } from "@/lib/state/ui";
+import { commitScroll } from "./commit";
+import { measureChapters } from "./measure";
+import { lenisHandle, ranges } from "./store";
 
 /**
  * The single scroll authority.
@@ -18,13 +15,18 @@ import { progressMV, chapterTMV, scrollState } from "./store";
  * — the previous site had three systems competing for the same gesture (Lenis,
  * a rect-polling scroll listener in the navbar, and a capture-phase non-passive
  * wheel hijack in the terminal), and the fix is structural rather than
- * disciplinary: there is exactly one subscriber, and it lives here.
+ * disciplinary: there is exactly one subscriber.
  *
- * Renders no DOM of its own (root Lenis drives window), so wrapping the server
- * -rendered tree in it costs nothing and causes no hydration mismatch.
+ * There is also exactly one frame loop. When the 3D canvas is mounted it owns
+ * the loop and ticks Lenis from inside it; when there is no canvas (tier 0,
+ * reduced motion, no WebGL) Lenis runs its own. Never both.
+ *
+ * Renders no DOM of its own, so wrapping the server-rendered tree costs nothing
+ * and causes no hydration mismatch.
  */
 export function ScrollProvider({ children }: { children: React.ReactNode }) {
   const [reduced, setReduced] = useState(false);
+  const canvasDriving = useUIStore((s) => s.canvasDriving);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -42,23 +44,37 @@ export function ScrollProvider({ children }: { children: React.ReactNode }) {
         smoothWheel: !reduced,
         lerp: reduced ? 1 : 0.1,
         syncTouch: false,
+        // Handed to R3F's loop the moment the canvas mounts.
+        autoRaf: !canvasDriving,
       }}
     >
-      <ScrollDriver reduced={reduced} />
+      <ScrollDriver reduced={reduced} canvasDriving={canvasDriving} />
       {children}
     </ReactLenis>
   );
 }
 
-function ScrollDriver({ reduced }: { reduced: boolean }) {
+function ScrollDriver({
+  reduced,
+  canvasDriving,
+}: {
+  reduced: boolean;
+  canvasDriving: boolean;
+}) {
   const lenis = useLenis();
-  const ranges = useRef<ChapterRange[]>([]);
-  const lastChapter = useRef(-1);
-
-  /** Re-measure on anything that can change layout. */
   const remeasure = useCallback(() => {
     ranges.current = measureChapters();
   }, []);
+
+  /* Publish the instance as a module singleton: the R3F canvas is a separate
+     reconciler root, and reaching across it via context is a dependency we do
+     not need to take. */
+  useEffect(() => {
+    lenisHandle.current = lenis ?? null;
+    return () => {
+      lenisHandle.current = null;
+    };
+  }, [lenis]);
 
   useEffect(() => {
     remeasure();
@@ -69,8 +85,8 @@ function ScrollDriver({ reduced }: { reduced: boolean }) {
     const ro = new ResizeObserver(remeasure);
     ro.observe(document.body);
 
-    // iOS Safari's address bar resizes the visual viewport without firing
-    // a window resize, which silently invalidates every measured range.
+    // iOS Safari's address bar resizes the visual viewport without firing a
+    // window resize, which silently invalidates every measured range.
     window.visualViewport?.addEventListener("resize", remeasure);
 
     return () => {
@@ -79,28 +95,11 @@ function ScrollDriver({ reduced }: { reduced: boolean }) {
     };
   }, [remeasure]);
 
-  /* The one scroll subscriber in the app. */
+  /* Commit here only while Lenis owns the loop. With the canvas mounted, the
+     driver inside it commits instead — so state is written exactly once. */
   useLenis((instance) => {
-    const progress = instance.progress || 0;
-    scrollState.progress = progress;
-    scrollState.velocity = instance.velocity;
-    progressMV.set(progress);
-
-    const { index, t } = resolveChapter(
-      instance.scroll,
-      window.innerHeight,
-      ranges.current,
-    );
-    scrollState.chapterIndex = index;
-    scrollState.chapterT = t;
-    chapterTMV.set(t);
-
-    // Cold path: only on an actual chapter change, and written straight to the
-    // DOM so the server-rendered Nav stays a Server Component.
-    if (index !== lastChapter.current) {
-      lastChapter.current = index;
-      markCurrentChapter(index);
-    }
+    if (canvasDriving) return;
+    commitScroll(instance);
   });
 
   /*
@@ -152,7 +151,6 @@ function ScrollDriver({ reduced }: { reduced: boolean }) {
     const id = project ? `project-${project.id}` : window.location.hash.slice(1);
     if (!id) return;
 
-    // After fonts and layout settle, or the target has moved.
     const timer = window.setTimeout(() => {
       const element = document.getElementById(id);
       if (element) lenis.scrollTo(element, { immediate: true });
@@ -161,29 +159,4 @@ function ScrollDriver({ reduced }: { reduced: boolean }) {
   }, [lenis]);
 
   return null;
-}
-
-/**
- * Mark the active nav link with aria-current.
- *
- * Written directly to the DOM rather than through React so Nav can stay a
- * Server Component. The four project chapters all map to the single collapsed
- * "Projects" nav entry.
- */
-function markCurrentChapter(index: number) {
-  const chapter = CHAPTERS[index];
-  if (!chapter) return;
-
-  const navId =
-    chapter.kind === "project"
-      ? (CHAPTERS[FIRST_PROJECT_INDEX]?.id ?? chapter.id)
-      : chapter.id;
-
-  document
-    .querySelectorAll<HTMLAnchorElement>("[data-nav] a[href^='#']")
-    .forEach((link) => {
-      const isCurrent = link.getAttribute("href") === `#${navId}`;
-      if (isCurrent) link.setAttribute("aria-current", "true");
-      else link.removeAttribute("aria-current");
-    });
 }
